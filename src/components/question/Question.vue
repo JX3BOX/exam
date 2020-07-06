@@ -98,9 +98,9 @@ export default {
         },
         getQuestion() {
             this.loading = true;
-            // let getUrl = __next + "api/qestion/user-exam-paper/q/:questionId"
+            // let getUrl = __next + "api/question/user-exam-paper/q/:questionId"
             // let getUrl = "/api/question/user-exam-paper/q/";
-            let getUrl = __next + "api/qestion/"
+            let getUrl = __next + "api/question/"
             // let getUrl = "/api/question/";
             getUrl += this.questionid;
 
