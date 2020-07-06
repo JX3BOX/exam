@@ -173,8 +173,8 @@ export default {
         },
         fetchData(page = 1) {
             window.scrollTo(0, 0);
-            // let url = __next + "api/qestion/user-exam-paper"
-            let url = "/api/question/user-exam-paper";
+            let url = __next + "api/qestion/user-exam-paper"
+            // let url = "/api/question/user-exam-paper";
             let query = { page: page };
             if (this.useQuery) {
                 if (this.tagSearch !== "") {

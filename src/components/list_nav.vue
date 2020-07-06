@@ -5,17 +5,17 @@
             <router-link to="/questions/pve">
                 <img svg-inline src="../assets/img/logo.svg" />
                 <span>PVE题库</span>
-                <i class="u-mark isnew">全新上线</i>
+                <i class="u-mark isnew">还没上线</i>
             </router-link>
             <router-link to="/questions/pvp">
                 <img svg-inline src="../assets/img/logo.svg" />
                 <span>PVP题库</span>
-                <i class="u-mark isnew">全新上线</i>
+                <i class="u-mark isnew">还没上线</i>
             </router-link>
             <router-link to="/questions/pvx">
                 <img svg-inline src="../assets/img/logo.svg" />
                 <span>PVX题库</span>
-                <i class="u-mark isnew">全新上线</i>
+                <i class="u-mark isnew">还没上线</i>
             </router-link>
         </div>
         <h5 class="u-title">试卷</h5>
