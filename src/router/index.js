@@ -8,6 +8,10 @@ Vue.use(VueRouter);
 
 const routes = [
     { name: "index", path: "/", component: Index },
+    { name: "exam-list", path: "/list", component: () => import("../components/exam/ExamList.vue") },
+    { name: "exam-take", path: "/paper/:id", component: () => import("../components/exam/TakeExam.vue") },
+    { name: "exam-rank", path: "/paper/rank/:id", component: () => import("../components/exam/ExamRank.vue") },
+    { name: "question-take", path: "/question/:id", component: () => import("../components/question/Question.vue") }
     // { name: "fn", path: "/fn", component: Fn },
     // { name: "single", path: "/view/:id", component: Single },
 ];

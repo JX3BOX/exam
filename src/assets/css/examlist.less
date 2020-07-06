@@ -1,0 +1,82 @@
+.c-exam {
+    padding: 20px;
+    max-width: 1260px;
+    .auto(x);
+}
+.c-exam-title {
+    font-weight: 300;
+    .x;
+    margin: 0;
+}
+@media screen and (max-width: @phone) {
+    .c-exam {
+        padding: 10px 15px 0 15px;
+    }
+    .c-exam-title {
+        .fz(1.5rem);
+    }
+}
+
+.el-select .el-input {
+    width: 200px;
+}
+.c-exam-filter {
+    padding-top: 20px;
+    .el-input-group__prepend {
+        background-color: #fff;
+    }
+}
+
+.c-exam-list {
+    overflow: visible;
+    .el-table__header-wrapper {
+        position: sticky;
+        top: 112px;
+        .z(100);
+
+        .cell {
+            .fz(12px);
+            // font-weight: normal;
+            color: @darkblue;
+        }
+    }
+
+    .cell {
+        .fz(14px);
+        // font-family: Cambria, Cochin, Georgia, Times, "Times New Roman",
+        //     -apple-system, "Microsoft YaHei", Trebuchet MS, Calibri,
+        //     BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica,
+        //     sans-serif;
+        text-rendering: optimizelegibility;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .el-tag {
+        .mr(5px);
+    }
+    .u-mark {
+        color: #fff;
+        font-size: 12px;
+        font-style: normal;
+        padding: 1px 5px;
+        border-radius: 2px;
+        position: relative;
+        *zoom: 1;
+        margin-left: 5px;
+    }
+    .bg-black {
+        background-color: black;
+    }
+    .bg-magenta {
+        background-color: magenta;
+    }
+}
+.el-table tbody td:hover {
+    cursor: pointer;
+}
+
+.c-exam-pages {
+    .mt(10px);
+}

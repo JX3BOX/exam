@@ -2,7 +2,7 @@
     <div id="app" :class="{ 'p-list': mode == 'list', 'p-single': mode == 'single' }">
         <Header></Header>
         <Breadcrumb
-            name="频道名称"
+            name="趣味题库"
             slug="slug"
             root="/slug"
             :publishEnable="true"
@@ -15,15 +15,15 @@
         <LeftSidebar>
             <Nav />
         </LeftSidebar>
-        <Main :withoutRight="false">
+        <Main :withoutRight="true">
             <single v-if="mode == 'single'" />
             <div class="m-main" v-else>
-                <tabs />
+                <!-- <tabs /> -->
                 <router-view />
             </div>
-            <RightSidebar>
+            <!-- <RightSidebar>
                 <Extend />
-            </RightSidebar>
+            </RightSidebar> -->
             <Footer></Footer>
         </Main>
     </div>
@@ -32,8 +32,8 @@
 <script>
 import Info from "@/components/Info.vue";
 import Nav from "@/components/Nav.vue";
-import Extend from "@/components/Extend.vue";
-import tabs from "@/components/tabs";
+// import Extend from "@/components/Extend.vue";
+// import tabs from "@/components/tabs";
 import single from "@/components/single.vue";
 const { getRewrite } = require("@jx3box/jx3box-common/js/utils");
 
@@ -61,8 +61,8 @@ export default {
     components: {
         Info,
         Nav,
-        Extend,
-        tabs,
+        // Extend,
+        // tabs,
         single
     },
 };
