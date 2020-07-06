@@ -1,6 +1,6 @@
 <template>
     <div class="v-index">
-        <list />
+        <!-- <list /> -->
     </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
     created: function() {
     },
     components: {
-        list
+        // list
     },
 };
 </script>

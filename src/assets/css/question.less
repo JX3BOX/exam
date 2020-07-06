@@ -1,0 +1,68 @@
+.c-question-content {
+    padding: 0 50px;
+    .lh(2em);
+    .q-attr {
+        .q-attr-hint {
+            color: red;
+        }
+        span {
+            vertical-align: middle;
+        }
+        .el-rate {
+            display: inline-block;
+            .ml(10px);
+        }
+        .q-attr-author {
+            .ml(10px);
+            font-weight: 300;
+            color: #888;
+        }
+    }
+    .el-checkbox-group,
+    .el-radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .el-checkbox,
+    .el-radio {
+        // display: inline-block;
+        .w(45%);
+        // .ml(0) !important;
+        // .mt(20px);
+        // .mb(20px);
+        // .mr(0);
+        // border-color: rgb(245, 248, 248);
+        // background-color: rgb(245, 248, 248);
+    }
+    .el-radio-group {
+        .w(100%);
+        // .mt(-20px);
+    }
+    .c-exam-take-btn {
+        .mt(40px);
+        .el-button {
+            width: 15%;
+        }
+    }
+    .is-correct-answer {
+        background-color: rgb(0,200,0);
+        .el-checkbox__label, .el-radio__label {
+            color: white !important;
+        }
+    }
+}
+.el-checkbox__input,
+.el-radio__input {
+    display: none;
+}
+.el-checkbox,
+.el-radio {
+    display: inline-block;
+    .ml(0) !important;
+    .mt(20px);
+    .mb(20px);
+    .mr(0);
+    border-color: rgb(245, 248, 248);
+    background-color: rgb(245, 248, 248);
+}
