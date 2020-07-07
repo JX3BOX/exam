@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { axios } from "@/service/api.js";
+import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
 export default {
@@ -73,7 +73,6 @@ export default {
     mounted() {
         this.getQuestionId();
         this.getUserInfo();
-        this.getQuestion();
     },
     methods: {
         getQuestionId() {
@@ -90,6 +89,7 @@ export default {
         getUserInfo() {
             let uid = null;
             if (User.getInfo() && User.getInfo().group > 60) {
+                this.getQuestion();
                 return true;
             } else {
                 this.$router.replace('/index')
@@ -100,11 +100,10 @@ export default {
             this.loading = true;
             // let getUrl = __next + "api/question/user-exam-paper/q/:questionId"
             // let getUrl = "/api/question/user-exam-paper/q/";
-            let getUrl = __next + "api/question/"
-            // let getUrl = "/api/question/";
+            let getUrl = realUrl(__next, "api/question/")
             getUrl += this.questionid;
 
-            axios(getUrl, "GET")
+            axios(getUrl, "GET", true)
                 .then(response => {
                     console.log(response);
                     if (!response.id) {
