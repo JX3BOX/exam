@@ -149,9 +149,9 @@ export default {
     computed: {},
     watch: {},
     mounted() {
-        // 先判断是否登录
-        // this.checkLogin();
-        this.getExamInfo();
+        先判断是否登录
+        this.checkLogin();
+        // this.getExamInfo();
     },
     methods: {
         checkLogin() {
