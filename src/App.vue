@@ -12,10 +12,10 @@
             <img slot="logo" svg-inline src="./assets/img/100.svg" />
             <Info />
         </Breadcrumb>
-        <LeftSidebar>
+        <LeftSidebar :open="false">
             <Nav />
         </LeftSidebar>
-        <Main :withoutRight="true">
+        <Main :withoutRight="true" :withoutLeft="true">
             <div class="m-main">
                 <router-view />
             </div>

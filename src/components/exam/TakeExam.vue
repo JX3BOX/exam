@@ -3,7 +3,7 @@
         <div class="c-exam-take-main">
             <div class="c-exam-take-title">
                 <h1>
-                    {{examInfo ? examInfo.title : "试卷"}}
+                    《{{examInfo ? examInfo.title : "试卷"}}》
                     <i
                         class="u-mark bg-magenta"
                         v-if="examInfo && examInfo.corner"
@@ -14,7 +14,12 @@
                 <h3>{{examInfo.desc}}</h3>
                 <p class="c-exam-attr-content">
                     <span class="c-exam-attr-prop">出卷人：</span>
-                    <span class="c-exam-attr-value">{{examInfo.author}}</span>
+                    <span class="c-exam-attr-value">
+                        <el-link :href="paperAuthorLink" target="_blank" :underline="false">
+                            <el-avatar :src="paperAuthorAvatar"></el-avatar>
+                            {{examInfo.author}}
+                        </el-link>
+                    </span>
                 </p>
                 <p class="c-exam-attr-content" v-if="examInfo.tags">
                     <span class="c-exam-attr-prop">试卷标签：</span>
@@ -28,15 +33,13 @@
                 </p>
                 <p class="c-exam-attr-content" style="margin-top: -8px;">
                     <span class="c-exam-attr-prop">总共题数：</span>
-                    <span class="c-exam-attr-value">{{questionIdList.length}}</span>
+                    <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
+                    <span class="c-exam-attr-value">共10题，每题10分，满分100分。</span>
                 </p>
             </div>
             <div class="c-exam-take-result" v-if="score !== -1">
-                <p class="result-score">
-                    <span>您的得分：</span>
-                    <span style="font-size: 64px">{{score}}</span>
-                    <span>分</span>
-                </p>
+                <p class="result-text">本次得分</p>
+                <p class="result-score">{{score}}</p>
             </div>
             <template v-if="questionList.length > 0">
                 <el-card class="box-card" v-for="(question,index) of questionList" :key="index">
@@ -46,7 +49,11 @@
                                 v-if="eachCorrectiveness[question.id] !== undefined"
                                 :class="{'el-icon-success': eachCorrectiveness[question.id], 'el-icon-error': !eachCorrectiveness[question.id]}"
                             ></i>
-                            {{index+1}}. {{ question.title }}
+                            {{index+1}}.
+                            <span
+                                class="q-hint"
+                            >[{{ question.type === "checkbox" ? "多选题" : "单选题" }}]</span>
+                            {{ question.title }}
                         </h3>
                         <div class="q-attr">
                             <p class="q-attr-content">
@@ -57,7 +64,7 @@
                                 <span class="q-attr-prop">题目标签：</span>
                                 <span class="q-attr-value">
                                     <el-tag
-                                        size="medium"
+                                        size="small"
                                         v-for="tag of JSON.parse(question.tags)"
                                         :key="tag"
                                     >{{tag}}</el-tag>
@@ -74,7 +81,7 @@
                                 </span>
                             </p>
                         </div>
-                        <h4 class="q-hint">{{ question.type === "checkbox" ? "多选题" : "单选题" }}</h4>
+
                         <template v-if="question.type === 'checkbox'">
                             <el-checkbox-group v-model="userAnswers[question.id]">
                                 <el-checkbox
@@ -127,6 +134,7 @@ import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
 import Extend from "@/components/Extend.vue";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
+import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "TakeExam",
     components: {
@@ -146,6 +154,7 @@ export default {
             questionList: [], // 所有题目的数组
             currentQuestionNumber: 1, // 当前题目是第几题，从1开始
             isSubmitted: false, // 判断是否已经提交试卷
+            authorAvatarUrl: "", // 这个url还没处理过
 
             correctCount: -1,
             score: -1,
@@ -154,12 +163,19 @@ export default {
             whyami: {}
         };
     },
-    computed: {},
+    computed: {
+        paperAuthorAvatar() {
+            return showAvatar(this.authorAvatarUrl, "s");
+        },
+        paperAuthorLink() {
+            return authorLink(this.examInfo.authorId);
+        }
+    },
     watch: {},
     mounted() {
         // // 先判断是否登录
-        // this.checkLogin();
-        this.getExamInfo();
+        this.checkLogin();
+        // this.getExamInfo();
         // this.getSolution()
     },
     methods: {
@@ -177,6 +193,17 @@ export default {
                     User.toLogin();
                 }, 1000);
             }
+        },
+        getAuhtorAvatar(uid) {
+            axios(`https://server.jx3box.com/user/info?uid=${uid}`, "GET")
+                .then(response => {
+                    if (response.code === 10024) {
+                        this.authorAvatarUrl = response.data.avatar;
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                });
         },
         getExamInfo() {
             if (this.$route.params.id) {
@@ -225,8 +252,10 @@ export default {
                         medalAward: response.medalAward,
                         title: response.title,
                         tags: response.tags,
-                        author: response.createUser
+                        author: response.createUser,
+                        authorId: response.createUserId
                     };
+                    this.getAuhtorAvatar(response.createUserId);
                     this.questionIdList = response.questionIdList;
                     let questions = response.questionDetailList;
 
@@ -258,13 +287,13 @@ export default {
                             this.$message.error(e.msg);
                             break;
                         case 404:
-                            this.loading = true
+                            this.loading = true;
                             this.$message.error("试卷不存在！");
                             setTimeout(() => {
                                 this.$router.replace("/list");
                             }, 1000);
-                            
-                            break
+
+                            break;
                         case 9999:
                             this.$message.error("登录失效, 请重新登录");
                             //1.注销

@@ -2,6 +2,9 @@
     margin: auto -30px;
     background-color: rgb(245, 248, 248);
     .pb(50px);
+    .c-exam-take-main {
+        .pr;
+    }
 }
 .c-exam-take-title {
     // background-color: rgb(210, 211, 211);
@@ -41,6 +44,12 @@
         color: #888;
         font-weight: 300;
     }
+    .c-exam-attr-content {
+        .el-avatar {
+            vertical-align: middle;
+            .mr(10px);
+        }
+    }
     .c-exam-attr-value {
         .el-tag {
             .mr(10px);
@@ -49,10 +58,33 @@
     }
 }
 .c-exam-take-result {
-    .auto(x);
+    .w(200px);
+    .h(150px);
     text-align: center;
+    border: 2px solid;
+    border-radius: 5px;
+    background-color: white;
+    border-color: #d2d3d3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .pa;
+    top: 10px;
+    right: 30px;
+    .result-text {
+        .fz(18px);
+        font-weight: bold;
+        color: #24292e;
+        font-family: "Source Han Sans CN";
+        margin: 0;
+    }
     .result-score {
-        color: red;
+        .mt(0);
+        .mb(0);
+        .fz(64px);
+        color: #ce3939;
+        font-style: italic;
+        font-family: Georgia, "Times New Roman", Times, serif;
     }
 }
 .el-card {
@@ -77,6 +109,7 @@
     .lh(2em);
     .q-hint {
         color: red;
+        .mr(4px);
     }
     .el-checkbox-group,
     .el-radio-group {
@@ -88,18 +121,21 @@
     .el-radio {
         // display: inline-block;
         .w(45%);
-        .el-checkbox__label, .el-radio__label {
+        .el-checkbox__label,
+        .el-radio__label {
             white-space: normal;
         }
         &.is-correct-answer {
-            background-color: rgb(0,200,0);
-            .el-checkbox__label, .el-radio__label {
+            background-color: rgb(0, 200, 0);
+            .el-checkbox__label,
+            .el-radio__label {
                 color: white !important;
             }
         }
         &.is-wrong-answer {
-            background-color: rgb(200,0,0);
-            .el-checkbox__label, .el-radio__label {
+            background-color: rgb(200, 0, 0);
+            .el-checkbox__label,
+            .el-radio__label {
                 color: white !important;
             }
         }
@@ -111,9 +147,35 @@
         // background-color: rgb(245, 248, 248);
     }
 
-    .el-radio.is-bordered, .el-checkbox.is-bordered {
+    .el-radio.is-bordered,
+    .el-checkbox.is-bordered {
         height: initial;
         padding: 12px;
+        &.is-checked {
+            border-color: #49c10f;
+            .el-radio__label,
+            .el-checkbox__label {
+                color: #49c10f;
+            }
+        }
+    }
+    .el-radio,
+    .el-checkbox {
+        transition: 0.2s ease-in-out;
+        .el-radio__label,
+        .el-checkbox__label {
+            transition: 0.2s ease-in-out;
+        }
+    }
+    .el-radio:hover,
+    .el-checkbox:hover {
+        transition: 0.2s ease-in-out;
+        border-color: #0366d6;
+        .el-radio__label,
+        .el-checkbox__label {
+            transition: 0.2s ease-in-out;
+            color: #0366d6;
+        }
     }
 
     .el-radio-group {
@@ -122,13 +184,17 @@
     }
     .q-attr {
         margin: auto;
-        border: 1px solid rgb(210, 211, 211);
+        .mb(30px);
+        border: 1px dotted rgb(210, 211, 211);
         border-radius: 10px;
         background-color: rgb(245, 248, 248);
         padding: 10px 20px;
+        line-height: 12px;
         .q-attr-content {
             margin: auto;
-            font-size: 14px;
+            font-size: 12px;
+            .dbi;
+            .mr(20px);
             .q-attr-prop {
                 color: #888;
                 font-weight: 300;
@@ -139,9 +205,18 @@
             }
         }
     }
-    .el-radio.is-bordered.is-disabled.is-checked, .el-checkbox.is-disabled.is-bordered.is-checked {
-        border-color: #0366D6;
+    .el-radio.is-bordered.is-disabled.is-checked,
+    .el-checkbox.is-disabled.is-bordered.is-checked {
+        border-color: #0366d6 !important;
         border-width: 4px;
+    }
+    .el-radio.is-bordered.is-disabled:hover,
+    .el-checkbox.is-disabled.is-bordered:hover {
+        border-color: #ebeef5;
+        .el-radio__label,
+        .el-checkbox__label {
+            color: #c0c4cc;
+        }
     }
     .q-whyami {
         .el-divider--horizontal {
@@ -209,13 +284,20 @@
     }
     .c-exam-take-content {
         padding: 10px 10px;
-        .el-checkbox, .el-radio {
+        .el-checkbox,
+        .el-radio {
             width: 100%;
         }
         .el-checkbox,
         .el-radio {
             .mt(0);
         }
+    }
+    .c-exam-take-result {
+        .pr;
+        .ml(30px);
+        top: unset;
+        right: unset;
     }
 }
 
