@@ -149,7 +149,7 @@ export default {
     computed: {},
     watch: {},
     mounted() {
-        先判断是否登录
+        // 先判断是否登录
         this.checkLogin();
         // this.getExamInfo();
     },
