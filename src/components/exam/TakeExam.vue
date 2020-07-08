@@ -112,7 +112,7 @@
                 <el-button
                     type="success"
                     @click="preSubmitPaper"
-                    v-if="!isSubmitted && !loading"
+                    v-if="!isSubmitted && !loading && questionList.length > 0"
                 >提交试卷</el-button>
             </div>
         </div>
@@ -157,9 +157,9 @@ export default {
     computed: {},
     watch: {},
     mounted() {
-        // 先判断是否登录
-        this.checkLogin();
-        // this.getExamInfo();
+        // // 先判断是否登录
+        // this.checkLogin();
+        this.getExamInfo();
         // this.getSolution()
     },
     methods: {
@@ -257,6 +257,14 @@ export default {
                             // 网络异常
                             this.$message.error(e.msg);
                             break;
+                        case 404:
+                            this.loading = true
+                            this.$message.error("试卷不存在！");
+                            setTimeout(() => {
+                                this.$router.replace("/list");
+                            }, 1000);
+                            
+                            break
                         case 9999:
                             this.$message.error("登录失效, 请重新登录");
                             //1.注销
