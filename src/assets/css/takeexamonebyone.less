@@ -1,0 +1,96 @@
+.c-exam-take {
+    margin: auto -30px;
+}
+.c-exam-take-main {
+    border-right: 2px solid rgb(245, 248, 248);
+}
+.c-exam-take-title {
+    background-color: rgb(245, 248, 248);
+    .mt(-20px);
+    .pl(30px);
+    h1 {
+        margin: 0;
+        .lh(3em);
+    }
+}
+.c-exam-take-content {
+    padding: 30px 50px;
+    .lh(2em);
+    .q-hint {
+        color: red;
+    }
+    .el-checkbox-group,
+    .el-radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .el-checkbox,
+    .el-radio {
+        // display: inline-block;
+        .w(45%);
+        // .ml(0) !important;
+        // .mt(20px);
+        // .mb(20px);
+        // .mr(0);
+        // border-color: rgb(245, 248, 248);
+        // background-color: rgb(245, 248, 248);
+    }
+    .el-radio-group {
+        .w(100%);
+        // .mt(-20px);
+    }
+    .c-exam-take-btn {
+        .mt(40px);
+        .el-button {
+            width: 15%;
+        }
+    }
+}
+.el-checkbox__input,
+.el-radio__input {
+    display: none;
+}
+.el-checkbox,
+.el-radio {
+    display: inline-block;
+    .ml(0) !important;
+    .mt(20px);
+    .mb(20px);
+    .mr(0);
+    border-color: rgb(245, 248, 248);
+    background-color: rgb(245, 248, 248);
+}
+.c-exam-take-sidebar {
+    padding: 30px;
+    // border-left: 2px solid rgb(245, 248, 248);
+    .summary-mark {
+        label.el-radio.is-bordered {
+            margin: 10px 10px;
+            width: 40px;
+            text-align: center;
+            padding: unset;
+            .el-radio__label {
+                .lh(40px);
+                padding: unset;
+            }
+        }
+        .q-attemped {
+            background-color: lightblue;
+        }
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .el-col{
+        .w(100%);
+        .mb(10px);
+    }
+    .c-exam-take-content {
+        .c-exam-take-btn {
+            .el-button {
+                width: 30%;
+            }
+        }
+    }
+}

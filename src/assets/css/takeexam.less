@@ -1,11 +1,10 @@
 .c-exam-take {
     margin: auto -30px;
-}
-.c-exam-take-main {
-    border-right: 2px solid rgb(245, 248, 248);
+    background-color: rgb(245, 248, 248);
+    .pb(50px);
 }
 .c-exam-take-title {
-    background-color: rgb(245, 248, 248);
+    // background-color: rgb(210, 211, 211);
     .mt(-20px);
     .pl(30px);
     h1 {
@@ -13,7 +12,50 @@
         .lh(3em);
     }
 }
+.c-exam-take-attr {
+    // background-color: rgb(210, 211, 211);
+    .pl(30px);
+    .pr(30px);
+    .pb(20px);
+    h3 {
+        .mt(0);
+    }
+    .c-exam-attr-prop {
+        color: #888;
+        font-weight: 300;
+    }
+    .c-exam-attr-value {
+        .el-tag {
+            .mr(10px);
+            .mb(8px);
+        }
+    }
+}
+.c-exam-take-result {
+    .auto(x);
+    text-align: center;
+    .result-score {
+        color: red;
+    }
+}
+.el-card {
+    margin: 25px auto;
+    .w(95%);
+}
 .c-exam-take-content {
+    .q-text i {
+        .mr(10px);
+    }
+    .el-icon-success {
+        color: green;
+        .fz(32px);
+        vertical-align: middle;
+    }
+    .el-icon-error {
+        color: red;
+        .fz(32px);
+        vertical-align: middle;
+    }
     padding: 30px 50px;
     .lh(2em);
     .q-hint {
@@ -29,6 +71,21 @@
     .el-radio {
         // display: inline-block;
         .w(45%);
+        .el-checkbox__label, .el-radio__label {
+            white-space: normal;
+        }
+        &.is-correct-answer {
+            background-color: rgb(0,200,0);
+            .el-checkbox__label, .el-radio__label {
+                color: white !important;
+            }
+        }
+        &.is-wrong-answer {
+            background-color: rgb(200,0,0);
+            .el-checkbox__label, .el-radio__label {
+                color: white !important;
+            }
+        }
         // .ml(0) !important;
         // .mt(20px);
         // .mb(20px);
@@ -36,16 +93,56 @@
         // border-color: rgb(245, 248, 248);
         // background-color: rgb(245, 248, 248);
     }
+
+    .el-radio.is-bordered, .el-checkbox.is-bordered {
+        height: initial;
+        padding: 12px;
+    }
+
     .el-radio-group {
         .w(100%);
         // .mt(-20px);
     }
-    .c-exam-take-btn {
-        .mt(40px);
-        .el-button {
-            width: 15%;
+    .q-attr {
+        margin: auto;
+        border: 1px solid rgb(210, 211, 211);
+        border-radius: 10px;
+        background-color: rgb(245, 248, 248);
+        padding: 10px 20px;
+        .q-attr-content {
+            margin: auto;
+            font-size: 14px;
+            .q-attr-prop {
+                color: #888;
+                font-weight: 300;
+            }
+            .el-rate {
+                .dbi;
+                vertical-align: middle;
+            }
         }
     }
+    .el-radio.is-bordered.is-disabled.is-checked, .el-checkbox.is-disabled.is-bordered.is-checked {
+        border-color: #0366D6;
+        border-width: 4px;
+    }
+    .q-whyami {
+        .el-divider--horizontal {
+            .mt(36px);
+        }
+        .el-divider__text {
+            .fz(16px);
+            color: #888;
+            font-weight: bolder;
+        }
+    }
+}
+.c-exam-take-btn {
+    .mt(40px);
+    .el-button {
+        width: 30%;
+    }
+    text-align: center;
 }
 .el-checkbox__input,
 .el-radio__input {
@@ -86,11 +183,45 @@
         .w(100%);
         .mb(10px);
     }
+}
+
+@media screen and (max-width: 779px) {
+    .el-card {
+        margin: 10px auto;
+        .w(85%);
+    }
     .c-exam-take-content {
-        .c-exam-take-btn {
-            .el-button {
-                width: 30%;
-            }
+        padding: 10px 10px;
+        .el-checkbox, .el-radio {
+            width: 100%;
+        }
+        .el-checkbox,
+        .el-radio {
+            .mt(0);
         }
     }
+}
+
+@media screen and (max-width: 466px) {
+    .el-message-box {
+        width: 90%;
+    }
+}
+
+.u-mark {
+    color: #fff;
+    font-size: 12px;
+    font-style: normal;
+    padding: 1px 5px;
+    border-radius: 2px;
+    position: relative;
+    *zoom: 1;
+    margin-right: 5px;
+    vertical-align: super;
+}
+.bg-black {
+    background-color: black;
+}
+.bg-magenta {
+    background-color: magenta;
 }
