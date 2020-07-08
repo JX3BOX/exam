@@ -4,7 +4,10 @@
             <div class="c-exam-take-title">
                 <h1>
                     {{examInfo ? examInfo.title : "试卷"}}
-                    <i class="u-mark bg-magenta" v-if="examInfo && examInfo.corner">{{examInfo.corner}}</i>
+                    <i
+                        class="u-mark bg-magenta"
+                        v-if="examInfo && examInfo.corner"
+                    >{{examInfo.corner}}</i>
                 </h1>
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
@@ -98,14 +101,19 @@
                         </template>
                         <div class="q-whyami" v-if="whyami[question.id] !== undefined">
                             <el-divider content-position="left">解析</el-divider>
-                            <div v-html="whyami[question.id]" class="q-whyami-content"></div>
+                            <Article :content="whyami[question.id]"></Article>
+                            <!-- <div v-html="whyami[question.id]" class="q-whyami-content"></div> -->
                         </div>
                     </div>
                 </el-card>
             </template>
 
             <div class="c-exam-take-btn">
-                <el-button type="success" @click="preSubmitPaper" v-if="!isSubmitted">提交试卷</el-button>
+                <el-button
+                    type="success"
+                    @click="preSubmitPaper"
+                    v-if="!isSubmitted && !loading"
+                >提交试卷</el-button>
             </div>
         </div>
         <!-- <RightSidebar>
@@ -152,6 +160,7 @@ export default {
         // 先判断是否登录
         this.checkLogin();
         // this.getExamInfo();
+        // this.getSolution()
     },
     methods: {
         checkLogin() {
@@ -190,7 +199,7 @@ export default {
             let getUrl = realUrl(__next, "api/question/user-exam-paper/");
             getUrl += this.examid;
             getUrl += "?details";
-            axios(getUrl, "GET")
+            axios(getUrl, "GET", true)
                 .then(response => {
                     console.log(response);
                     if (!response.id) {
@@ -243,7 +252,27 @@ export default {
                     // this.loadQuestion();
                 })
                 .catch(e => {
-                    console.log(e);
+                    switch (e.code) {
+                        case -1:
+                            // 网络异常
+                            this.$message.error(e.msg);
+                            break;
+                        case 9999:
+                            this.$message.error("登录失效, 请重新登录");
+                            //1.注销
+                            User.destroy();
+                            //2.保存未提交成功的信息
+                            //请保存至IndexedDB,勿占用localstorage
+                            //3.跳转至登录页携带redirect
+                            setTimeout(() => {
+                                User.toLogin();
+                            }, 1000);
+                            //不指定url时则自动跳回当前所在页面
+                            break;
+                        default:
+                            // 服务器错误
+                            this.$message.error(`[${e.code}]${e.msg}`);
+                    }
                 })
                 .then(() => {
                     this.loading = false;
