@@ -8,7 +8,7 @@
                 filterable
                 allow-create
                 default-first-option
-                placeholder="可以选择或输入试卷标签"
+                placeholder="选择分类"
                 slot="prepend"
             >
                 <el-option-group
@@ -39,34 +39,48 @@
             <el-table-column prop="id" label="编号" width="60"></el-table-column>
             <el-table-column prop="title" label="标题" width="300">
                 <template slot-scope="scope">
-                    <span>{{ scope.row.title }}</span>
+                    <span class="c-exam-list-title">《{{ scope.row.title }}》</span>
                     <i class="u-mark bg-magenta" v-if="scope.row.corner">{{ scope.row.corner }}</i>
                     <i class="u-mark bg-black" v-if="scope.row.category">{{ scope.row.category }}</i>
+                    <p class="c-exam-list-desc">{{ scope.row.desc }}</p>
                 </template>
             </el-table-column>
-            <el-table-column prop="desc" label="描述" class="test-class" width="240"></el-table-column>
+            <!-- <el-table-column prop="desc" label="描述" class="test-class" width="240"></el-table-column> -->
             <el-table-column prop="tags" label="标签" width="180">
                 <template slot-scope="scope">
-                    <el-tag v-for="tag of JSON.parse(scope.row.tags).slice(0,3)" :key="tag">{{tag}}</el-tag>
+                    <el-tag
+                        v-for="tag of JSON.parse(scope.row.tags).slice(0,3)"
+                        :key="tag"
+                        size="small"
+                    >{{tag}}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="medalAward" label="奖励" width="180"></el-table-column>
+            <el-table-column prop="hardStar" label="难度" width="120">
+                <template slot-scope="scope">
+                    <el-rate v-model="scope.row.hardStar" disabled text-color="#ff9900"></el-rate>
+                </template>
+            </el-table-column>
+            <el-table-column prop="author" label="出卷人" width="120">
+                <template slot-scope="scope">
+                    {{ scope.row.createUser }}
+                    <span
+                        class="c-exam-list-authorid"
+                    >uid: {{scope.row.createUserId}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="medalAward" label="奖励" width="120"></el-table-column>
             <el-table-column prop="hasTaken" label="已完成" width="90">
                 <template slot-scope="prop">{{prop.history !== null ? "是" : "否"}}</template>
             </el-table-column>
-            <!-- <el-table-column label="操作" width="180">
+            <el-table-column fixed="right" label="操作" width="180">
                 <template slot-scope="scope">
+                    <!-- @click.native.stop="handleEdit(scope.$index, scope.row)" -->
                     <el-button
-                        size="mini"
-                        @click.native.stop="handleEdit(scope.$index, scope.row)"
-                    >编辑</el-button>
-                    <el-button
-                        size="mini"
-                        type="danger"
-                        @click.native.stop="handleDelete(scope.$index, scope.row)"
-                    >删除</el-button>
+                        @click="handleEdit(scope.$index, scope.row)"
+                        type="primary"
+                    >开始答卷</el-button>
                 </template>
-            </el-table-column> -->
+            </el-table-column>
         </el-table>
 
         <el-pagination
@@ -92,64 +106,40 @@ export default {
     },
     data() {
         return {
-            tagOptions: [
-                {
-                    label: "玩法",
-                    options: [
-                        { value: "PVE", label: "PVE" },
-                        { value: "PVP", label: "PVP" },
-                        { value: "PVX", label: "PVX" }
-                    ]
-                },
-                {
-                    label: "科目",
-                    options: [
-                        { value: "语文", label: "语文" },
-                        { value: "数学", label: "数学" },
-                        { value: "物理", label: "物理" },
-                        { value: "化学", label: "化学" },
-                        { value: "生物", label: "生物" },
-                        { value: "历史", label: "历史" },
-                        { value: "地理", label: "地理" },
-                        { value: "政治", label: "政治" }
-                    ]
-                },
-                {
-                    label: "语种",
-                    options: [
-                        { value: "英语", label: "英语" },
-                        { value: "日语", label: "日语" },
-                        { value: "韩语", label: "韩语" },
-                        { value: "其他外语", label: "其他外语" }
-                    ]
-                },
-                {
-                    label: "专业",
-                    options: [
-                        { value: "医学", label: "医学" },
-                        { value: "法学", label: "法学" },
-                        { value: "会计", label: "会计" }
-                    ]
-                },
-                {
-                    label: "生活技能",
-                    options: [
-                        { value: "缝纫", label: "缝纫" },
-                        { value: "锻造", label: "锻造" },
-                        { value: "烹饪", label: "烹饪" }
-                    ]
-                },
-                {
-                    label: "其他玩法",
-                    options: [
-                        { value: "抓马", label: "抓马" },
-                        { value: "宠物", label: "宠物" },
-                        { value: "副本", label: "副本" },
-                        { value: "插件", label: "插件" }
-                    ]
-                }
-            ],
-            marks: [{ "label": "官方试卷", "value": "official" }],
+            tags: {
+                school: [
+                    "七秀",
+                    "万花",
+                    "五毒",
+                    "长歌",
+                    "天策",
+                    "少林",
+                    "明教",
+                    "苍云",
+                    "纯阳",
+                    "唐门",
+                    "藏剑",
+                    "丐帮",
+                    "蓬莱",
+                    "凌雪"
+                ],
+                subject: [
+                    "语文",
+                    "数学",
+                    "外语",
+                    "信息",
+                    "物理",
+                    "化学",
+                    "生物",
+                    "政治",
+                    "历史",
+                    "地理"
+                ],
+                game: ["PVE", "PVP", "PVX", "PVBB"],
+                play: ["副本", "宠物", "家园", "奇遇", "成就"],
+                domain: ["美容", "金融", "医学", "法学"]
+            },
+            marks: [{ label: "官方试卷", value: "official" }],
             tagSearch: "",
             nameSearch: "",
             listData: [],
@@ -161,8 +151,25 @@ export default {
         };
     },
     computed: {
-        isName() {
-            return false;
+        tagOptions() {
+            let translate = {
+                game: "方向",
+                play: "玩法",
+                school: "门派",
+                subject: "学科",
+                domain: "领域",
+            }
+            let tmpOptions = []
+            // label options label value
+            for (let key in translate) {
+                tmpOptions.push({
+                    label: translate[key],
+                    options: this.tags[key].map((tag) => {
+                        return {label: tag, value: tag}
+                    })
+                })
+            }
+            return tmpOptions
         }
     },
     mounted() {
@@ -174,7 +181,7 @@ export default {
         },
         fetchData(page = 1) {
             window.scrollTo(0, 0);
-            let url = realUrl(__next, "api/question/user-exam-paper")
+            let url = realUrl(__next, "api/question/user-exam-paper");
             let query = { page: page };
             if (this.useQuery) {
                 if (this.tagSearch !== "") {
@@ -234,8 +241,8 @@ export default {
             this.fetchData(i);
         },
         searchWithQuery() {
-            this.useQuery = true
-            this.fetchData(1)
+            this.useQuery = true;
+            this.fetchData(1);
         }
     }
 };

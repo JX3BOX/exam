@@ -8,6 +8,26 @@
     .x;
     margin: 0;
 }
+.c-exam-list {
+    .c-exam-list-title {
+        .fz(14px);
+    }
+    .c-exam-list-desc {
+        color: #888;
+        .fz(12px);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin: 0 auto;
+    }
+    .c-exam-list-authorid {
+        .fz(12px);
+        color: #888;
+    }
+    .el-rate__icon {
+        .mr(0);
+    }
+}
 @media screen and (max-width: @phone) {
     .c-exam {
         padding: 10px 15px 0 15px;
@@ -18,7 +38,8 @@
 }
 
 .el-select .el-input {
-    width: 200px;
+    background-color: @bg-gray;
+    width: 120px;
 }
 .c-exam-filter {
     padding-top: 20px;
