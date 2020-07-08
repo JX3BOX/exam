@@ -54,7 +54,7 @@
             <el-table-column prop="hasTaken" label="已完成" width="90">
                 <template slot-scope="prop">{{prop.history !== null ? "是" : "否"}}</template>
             </el-table-column>
-            <el-table-column label="操作" width="180">
+            <!-- <el-table-column label="操作" width="180">
                 <template slot-scope="scope">
                     <el-button
                         size="mini"
@@ -66,7 +66,7 @@
                         @click.native.stop="handleDelete(scope.$index, scope.row)"
                     >删除</el-button>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
 
         <el-pagination
@@ -149,6 +149,7 @@ export default {
                     ]
                 }
             ],
+            marks: [{ "label": "官方试卷", "value": "official" }],
             tagSearch: "",
             nameSearch: "",
             listData: [],

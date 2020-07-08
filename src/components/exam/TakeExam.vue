@@ -2,7 +2,10 @@
     <div class="c-exam-take" v-loading="loading">
         <div class="c-exam-take-main">
             <div class="c-exam-take-title">
-                <h1>{{examInfo ? examInfo.title : "试卷"}}</h1>
+                <h1>
+                    {{examInfo ? examInfo.title : "试卷"}}
+                    <i class="u-mark bg-magenta" v-if="examInfo && examInfo.corner">{{examInfo.corner}}</i>
+                </h1>
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
                 <h3>{{examInfo.desc}}</h3>
@@ -20,7 +23,7 @@
                         >{{tag}}</el-tag>
                     </span>
                 </p>
-                <p class="c-exam-attr-content">
+                <p class="c-exam-attr-content" style="margin-top: -8px;">
                     <span class="c-exam-attr-prop">总共题数：</span>
                     <span class="c-exam-attr-value">{{questionIdList.length}}</span>
                 </p>
@@ -115,6 +118,7 @@
 import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
 import Extend from "@/components/Extend.vue";
+import { JX3BOX, User } from "@jx3box/jx3box-common";
 export default {
     name: "TakeExam",
     components: {
@@ -122,8 +126,9 @@ export default {
     },
     data() {
         return {
-            loading: false,
+            loading: true,
             examInfo: { title: "试卷" },
+            marks: [{ label: "官方试卷", value: "official" }],
             userAnswers: {}, // 储存格式：{id: answer}
             // isMultiple: false,
             chosenOptions: null,
@@ -144,9 +149,26 @@ export default {
     computed: {},
     watch: {},
     mounted() {
+        // 先判断是否登录
+        // this.checkLogin();
         this.getExamInfo();
     },
     methods: {
+        checkLogin() {
+            if (User.isLogin()) {
+                this.getExamInfo();
+            } else {
+                this.$message.error("请先登录");
+                //1.注销
+                User.destroy();
+                //2.保存未提交成功的信息
+                //请保存至IndexedDB,勿占用localstorage
+                //3.跳转至登录页携带redirect
+                setTimeout(() => {
+                    User.toLogin();
+                }, 1000);
+            }
+        },
         getExamInfo() {
             if (this.$route.params.id) {
                 this.examid = this.$route.params.id;
@@ -179,9 +201,17 @@ export default {
                         return false;
                     }
                     this.examid = response.id;
+
+                    // 获取角标的中文
+                    let tmpMark = null;
+                    this.marks.forEach(mark => {
+                        if (mark.value === response.corner) {
+                            tmpMark = mark.label;
+                        }
+                    });
                     this.examInfo = {
                         category: response.category,
-                        corner: response.corner,
+                        corner: tmpMark,
                         desc: response.desc,
                         medalAward: response.medalAward,
                         title: response.title,
@@ -226,15 +256,16 @@ export default {
         //     ];
         //     this.isMultiple = this.currentQuestion.type === "checkbox";
         // },
-        isAttemped(count) {
-            let questionid = this.questionIdList[count - 1];
-            return (
-                this.userAnswers[questionid] !== null &&
-                this.userAnswers[questionid] !== "" &&
-                this.userAnswers[questionid] !== undefined
-            );
-        },
+        // isAttemped(count) {
+        //     let questionid = this.questionIdList[count - 1];
+        //     return (
+        //         this.userAnswers[questionid] !== null &&
+        //         this.userAnswers[questionid] !== "" &&
+        //         this.userAnswers[questionid] !== undefined
+        //     );
+        // },
         preSubmitPaper() {
+            // 提交试卷前的检查
             let finalAnswers = {};
             let isFinished = true;
 
@@ -248,7 +279,10 @@ export default {
                         break;
                     }
                 }
+
                 options = JSON.parse(options);
+
+                // 判断是否有空的题目
                 if (value === null) {
                     isFinished = false;
                 } else if (typeof value !== "number") {
@@ -264,6 +298,7 @@ export default {
                 }
             }
 
+            // 如果有空的题目，提示是否要直接提交。但是不允许提交空白试卷
             if (!isFinished) {
                 this.$confirm(
                     "还没有完成所有题目的作答，是否继续答题？",
@@ -290,6 +325,8 @@ export default {
                 this.submitPaper(finalAnswers);
             }
         },
+
+        // 执行提交试卷请求
         submitPaper(answers) {
             this.$confirm(
                 "提交试卷后将无法再修改作答，且每套试卷只能作答一次。是否确定提交？",
@@ -355,6 +392,8 @@ export default {
                     return false;
                 });
         },
+
+        // 获取试卷答案
         getSolution() {
             this.loading = true;
             let solutionUrl = realUrl(
@@ -365,20 +404,21 @@ export default {
                 .then(response => {
                     console.log(response);
                     if (response.paper && response.paper.questionDetailList) {
+                        // 展示答案，是否正确，已经给选项标上是否正确的标记
                         let qda = response.paper.questionDetailList;
                         let tmpAnswerList = {};
                         let tmpCorrectiveness = {};
-                        let tmpWhyami = {}
+                        let tmpWhyami = {};
                         qda.forEach(question => {
                             tmpAnswerList[question.id] = question.answerList;
                             tmpCorrectiveness[question.id] =
                                 question.answerList.sort().toString() ===
                                 question.myAnswer.sort().toString();
-                            tmpWhyami[question.id] = question.whyami
+                            tmpWhyami[question.id] = question.whyami;
                         });
                         this.correctAnswers = tmpAnswerList;
                         this.eachCorrectiveness = tmpCorrectiveness;
-                        this.whyami = tmpWhyami
+                        this.whyami = tmpWhyami;
                     }
                 })
                 .catch(e => {
