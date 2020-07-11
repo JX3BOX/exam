@@ -1,7 +1,8 @@
 <template>
     <div class="c-question" v-loading="loading">
         <div class="c-question-content" v-if="currentQuestion">
-            <h3 class="q-text">{{ currentQuestion.title }}</h3>
+            <!-- <h3 class="q-text">{{ currentQuestion.title }}</h3> -->
+            <Article :content="currentQuestion.title"></Article>
             <div class="q-attr">
                 <span class="q-attr-hint">{{ isMultiple ? "多选题" : "单选题" }}</span>
                 <el-rate
@@ -22,7 +23,7 @@
                         border
                         disabled
                         :class="{'is-correct-answer': currentQuestion.answerList.includes(index)}"
-                    >{{String.fromCharCode(65+index)}}. {{option}}</el-checkbox>
+                    >{{String.fromCharCode(65+index)}}. <Article :content="option"></Article></el-checkbox>
                 </el-checkbox-group>
             </template>
             <template v-else>
@@ -34,7 +35,7 @@
                         border
                         disabled
                         :class="{'is-correct-answer': currentQuestion.answerList.includes(index)}"
-                    >{{String.fromCharCode(65+index)}}. {{option}}</el-radio>
+                    >{{String.fromCharCode(65+index)}}. <Article :content="option"></Article></el-radio>
                 </el-radio-group>
             </template>
             <!-- <div class="c-exam-take-btn">
@@ -52,10 +53,11 @@
 import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
+import Article from "@jx3box/jx3box-editor/src/Article.vue"
 export default {
     name: "Question",
     components: {
-        // HelloWorld
+        Article
     },
     data() {
         return {
@@ -92,7 +94,7 @@ export default {
                 this.getQuestion();
                 return true;
             } else {
-                this.$router.replace('/index')
+                this.$router.replace(`/question/${this.questionid}/take`)
                 return false;
             }
         },
