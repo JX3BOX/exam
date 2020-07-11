@@ -53,7 +53,8 @@
                             <span
                                 class="q-hint"
                             >[{{ question.type === "checkbox" ? "多选题" : "单选题" }}]</span>
-                            {{ question.title }}
+                            <!-- {{ question.title }} -->
+                            <Article :content="question.title"></Article>
                         </h3>
                         <div class="q-attr">
                             <p class="q-attr-content">
@@ -91,7 +92,7 @@
                                     border
                                     :disabled="isSubmitted"
                                     :class="{'is-correct-answer': isCorrectAnswerClass(question.id, index), 'is-wrong-answer': isWrongAnswerClass(question.id, index) }"
-                                >{{String.fromCharCode(65+index)}}. {{option}}</el-checkbox>
+                                >{{String.fromCharCode(65+index)}}. <Article :content="option"></Article></el-checkbox>
                             </el-checkbox-group>
                         </template>
                         <template v-else>
@@ -103,7 +104,7 @@
                                     border
                                     :disabled="isSubmitted"
                                     :class="{'is-correct-answer': isCorrectAnswerClass(question.id, index), 'is-wrong-answer': isWrongAnswerClass(question.id, index) }"
-                                >{{String.fromCharCode(65+index)}}. {{option}}</el-radio>
+                                >{{String.fromCharCode(65+index)}}. <Article :content="option"></Article></el-radio>
                             </el-radio-group>
                         </template>
                         <div class="q-whyami" v-if="whyami[question.id] !== undefined">
@@ -135,10 +136,12 @@ import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
 import Extend from "@/components/Extend.vue";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
+import Article from "@jx3box/jx3box-editor/src/Article.vue"
 export default {
     name: "TakeExam",
     components: {
         // Extend
+        Article
     },
     data() {
         return {
@@ -381,7 +384,7 @@ export default {
                                 type: "error"
                             });
                         } else {
-                            this.submitPaper(finalAnswers);
+                            this.submitPaper(finalAnswers, true);
                         }
                     })
                     .catch(() => {
@@ -393,7 +396,7 @@ export default {
         },
 
         // 执行提交试卷请求
-        submitPaper(answers) {
+        submitPaper(answers, force = false) {
             this.$confirm(
                 "提交试卷后将无法再修改作答，且每套试卷只能作答一次。是否确定提交？",
                 "提示",
@@ -410,11 +413,15 @@ export default {
                         __next,
                         `api/question/user-exam-paper/${this.examid}/i-finish-all`
                     );
+                    if (force) {
+                        postUrl += "?force";
+                    }
                     axios(postUrl, "POST", true, answers)
                         .then(response => {
-                            if (response.questionCount) {
-                                this.correctCount = response.correct;
-                                this.score = response.score;
+                            if (response.score) {
+                                this.correctCount =
+                                    response.score.questionRightCount;
+                                this.score = response.score.score;
                                 window.scrollTo(0, 0);
                                 this.getSolution();
                             } else {

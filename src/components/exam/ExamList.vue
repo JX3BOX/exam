@@ -72,13 +72,19 @@
             <el-table-column prop="hasTaken" label="已完成" width="90">
                 <template slot-scope="prop">{{prop.history !== null ? "是" : "否"}}</template>
             </el-table-column>
+            <el-table-column prop="ranking" label="排行榜" width="90">
+                <template slot-scope="scope">
+                    <el-button
+                        @click.native.stop="gotoRanking(scope.row)"
+                        type="text"
+                        size="small"
+                    >查看</el-button>
+                </template>
+            </el-table-column>
             <el-table-column fixed="right" label="操作" width="180">
                 <template slot-scope="scope">
                     <!-- @click.native.stop="handleEdit(scope.$index, scope.row)" -->
-                    <el-button
-                        @click="handleEdit(scope.$index, scope.row)"
-                        type="primary"
-                    >开始答卷</el-button>
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary">开始答卷</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -157,19 +163,19 @@ export default {
                 play: "玩法",
                 school: "门派",
                 subject: "学科",
-                domain: "领域",
-            }
-            let tmpOptions = []
+                domain: "领域"
+            };
+            let tmpOptions = [];
             // label options label value
             for (let key in translate) {
                 tmpOptions.push({
                     label: translate[key],
-                    options: this.tags[key].map((tag) => {
-                        return {label: tag, value: tag}
+                    options: this.tags[key].map(tag => {
+                        return { label: tag, value: tag };
                     })
-                })
+                });
             }
-            return tmpOptions
+            return tmpOptions;
         }
     },
     mounted() {
@@ -243,6 +249,12 @@ export default {
         searchWithQuery() {
             this.useQuery = true;
             this.fetchData(1);
+        },
+        gotoRanking(row) {
+            this.$router.push({
+                name: "exam-rank",
+                params: {id: row.id, examInfo: row}
+            })
         }
     }
 };

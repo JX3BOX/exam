@@ -1,4 +1,4 @@
-.c-question-content {
+.c-take-question-content {
     padding: 0 50px;
     .lh(2em);
     .q-attr {
@@ -51,6 +51,37 @@
             color: white !important;
         }
     }
+
+    .el-radio.is-bordered,
+    .el-checkbox.is-bordered {
+        height: initial;
+        padding: 12px;
+        &.is-checked {
+            border-color: #49c10f;
+            .el-radio__label,
+            .el-checkbox__label {
+                color: #49c10f;
+            }
+        }
+    }
+    .el-radio,
+    .el-checkbox {
+        transition: 0.2s ease-in-out;
+        .el-radio__label,
+        .el-checkbox__label {
+            transition: 0.2s ease-in-out;
+        }
+    }
+    .el-radio:hover,
+    .el-checkbox:hover {
+        transition: 0.2s ease-in-out;
+        border-color: #0366d6;
+        .el-radio__label,
+        .el-checkbox__label {
+            transition: 0.2s ease-in-out;
+            color: #0366d6;
+        }
+    }
 }
 .el-checkbox__input,
 .el-radio__input {
@@ -72,7 +103,12 @@
     div, p {
         .dbi;
     }
-    .c-article-box {
-        .mt(-10px);
+    
+}
+.c-exam-take-btn {
+    .mt(40px);
+    .el-button {
+        width: 30%;
     }
+    text-align: center;
 }
