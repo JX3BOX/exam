@@ -177,8 +177,8 @@ export default {
     watch: {},
     mounted() {
         // // 先判断是否登录
-        this.checkLogin();
-        // this.getExamInfo();
+        // this.checkLogin();
+        this.getExamInfo();
         // this.getSolution()
     },
     methods: {
