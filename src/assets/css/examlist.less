@@ -8,26 +8,26 @@
     .x;
     margin: 0;
 }
-.c-exam-list {
-    .c-exam-list-title {
-        .fz(14px);
-    }
-    .c-exam-list-desc {
-        color: #888;
-        .fz(12px);
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        margin: 0 auto;
-    }
-    .c-exam-list-authorid {
-        .fz(12px);
-        color: #888;
-    }
-    .el-rate__icon {
-        .mr(0);
-    }
-}
+// .c-exam-list {
+//     .c-exam-list-title {
+//         .fz(14px);
+//     }
+//     .c-exam-list-desc {
+//         color: #888;
+//         .fz(12px);
+//         white-space: nowrap;
+//         text-overflow: ellipsis;
+//         overflow: hidden;
+//         margin: 0 auto;
+//     }
+//     .c-exam-list-authorid {
+//         .fz(12px);
+//         color: #888;
+//     }
+//     .el-rate__icon {
+//         .mr(0);
+//     }
+// }
 @media screen and (max-width: @phone) {
     .c-exam {
         padding: 10px 15px 0 15px;
@@ -50,50 +50,167 @@
 
 .c-exam-list {
     overflow: visible;
-    .el-table__header-wrapper {
-        position: sticky;
-        top: 112px;
-        .z(100);
-
-        .cell {
-            .fz(12px);
-            // font-weight: normal;
-            color: @darkblue;
+    .mt(68px);
+    .el-card:hover {
+        cursor: pointer;
+        &.el-card__transparent {
+            opacity: 0.8;
         }
     }
+    .el-card {
+        width: 400px;
+        height: 280px;
+        float: left;
+        .ml(15px);
+        .mb(30px);
+        &.el-card__transparent {
+            opacity: 0.5;
+        }
+        .c-exam-list-corner {
+            color: #fff;
+            height: 36px;
+            width: 140px;
+            position: absolute;
+            right: -33px;
+            top: 19px;
+            text-align: center;
+            line-height: 36px;
+            background-color: var(--tc);
+            transform: rotate(45deg);
+        }
+        .c-exam-list-main {
+            .pt(48px);
+            .pl(30px);
+            .pr(30px);
+            .c-exam-list-title {
+                .fz(26px);
+                border-bottom: 7px solid #000;
+                border-image: -webkit-linear-gradient(
+                        left,
+                        var(--tc) 25%,
+                        var(--tct) 75%
+                    )
+                    100 100 100 100;
+                padding-bottom: 7px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+            .el-tag {
+                .mt(13px);
+            }
+        }
+        .c-exam-list-desc {
+            .pa;
+            bottom: 0;
+            .mb(0);
+            .w(100%);
+            .c-exam-list-desc-content {
+                padding: 0 20px;
+                height: 60px;
+                background: linear-gradient(90deg, var(--tc) 0, var(--tct) 135%);
+                svg {
+                    .h(48px);
+                    .w(60px);
+                    .mt(6px);
+                    fill: white;
+                }
+                div {
+                    color: white;
+                    .dbi;
+                    .w(260px);
+                    line-height: 30px;
+                    vertical-align: top;
+                    .ml(20px);
+                    .fz(15px);
+                    word-break: break-all;
+                    text-overflow: ellipsis;
+                    display: -webkit-inline-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                }
+            }
+        }
+        .c-exam-list-desc-misc {
+            .h(60px);
+            .fz(15px);
+            padding: 0 35px;
+            > div {
+                line-height: 60px;
+                color: #24292e;
+            }
+            .desc-misc-left {
+                text-align: left;
+                .dbi;
+            }
+            .desc-misc-right {
+                float: right;
+                .el-rate {
+                    .dbi;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+    // .el-table__header-wrapper {
+    //     position: sticky;
+    //     top: 112px;
+    //     .z(100);
 
-    .cell {
-        .fz(14px);
-        // font-family: Cambria, Cochin, Georgia, Times, "Times New Roman",
-        //     -apple-system, "Microsoft YaHei", Trebuchet MS, Calibri,
-        //     BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica,
-        //     sans-serif;
-        text-rendering: optimizelegibility;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
+    //     .cell {
+    //         .fz(12px);
+    //         // font-weight: normal;
+    //         color: @darkblue;
+    //     }
+    // }
 
-    .el-tag {
-        .mr(5px);
-    }
-    .u-mark {
-        color: #fff;
-        font-size: 12px;
-        font-style: normal;
-        padding: 1px 5px;
-        border-radius: 2px;
-        position: relative;
-        *zoom: 1;
-        margin-left: 5px;
-    }
-    .bg-black {
-        background-color: black;
-    }
-    .bg-magenta {
-        background-color: magenta;
+    // .cell {
+    //     .fz(14px);
+    //     // font-family: Cambria, Cochin, Georgia, Times, "Times New Roman",
+    //     //     -apple-system, "Microsoft YaHei", Trebuchet MS, Calibri,
+    //     //     BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica,
+    //     //     sans-serif;
+    //     text-rendering: optimizelegibility;
+    //     white-space: nowrap;
+    //     text-overflow: ellipsis;
+    //     overflow: hidden;
+    // }
+
+    // .el-tag {
+    //     .mr(5px);
+    // }
+    // .u-mark {
+    //     color: #fff;
+    //     font-size: 12px;
+    //     font-style: normal;
+    //     padding: 1px 5px;
+    //     border-radius: 2px;
+    //     position: relative;
+    //     *zoom: 1;
+    //     margin-left: 5px;
+    // }
+    // .bg-black {
+    //     background-color: black;
+    // }
+    // .bg-magenta {
+    //     background-color: magenta;
+    // }
+}
+.c-exam-list::after {
+    content: "";
+    clear: both;
+    .db;
+}
+
+@media screen and (max-width: 913px) {
+    .c-exam-list .el-card {
+        float: initial;
+        margin: 30px auto;
     }
 }
+
+
 .el-table tbody td:hover {
     cursor: pointer;
 }
