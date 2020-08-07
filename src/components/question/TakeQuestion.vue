@@ -1,8 +1,14 @@
 <template>
     <div class="c-take-question" v-loading="loading">
         <div class="c-take-question-content" v-if="currentQuestion">
-            <!-- <h3 class="q-text">{{ currentQuestion.title }}</h3> -->
-            <Article :content="currentQuestion.title"></Article>
+            <h3 class="q-text">
+                <i
+                    v-if="isCorrect !== undefined"
+                    :class="{'el-icon-success': isCorrect === true, 'el-icon-error': isCorrect === false}"
+                ></i>
+                <Article :content="currentQuestion.title"></Article>
+            </h3>
+
             <div class="q-attr">
                 <span class="q-attr-hint">{{ isMultiple ? "多选题" : "单选题" }}</span>
                 <el-rate
@@ -13,7 +19,20 @@
                 ></el-rate>
                 <span class="q-attr-author">
                     提交人：
-                    <b>{{ currentQuestion.createUser }}</b>
+                    <el-link :href="paperAuthorLink" target="_blank" :underline="false">
+                        <el-avatar :src="paperAuthorAvatar"></el-avatar>
+                        {{ currentQuestion.createUser }}
+                    </el-link>
+                </span>
+                <span class="q-attr-author">
+                    试卷标签：
+                    <span class="c-exam-attr-value">
+                        <el-tag
+                            size="medium"
+                            v-for="tag of JSON.parse(currentQuestion.tags)"
+                            :key="tag"
+                        >{{tag}}</el-tag>
+                    </span>
                 </span>
             </div>
 
@@ -25,7 +44,7 @@
                         :label="index"
                         border
                         :disabled="isSubmitted"
-                        :class="{'is-correct-answer': isCorrectAnswerClass(currentQuestion.id, index), 'is-wrong-answer': isWrongAnswerClass(currentQuestion.id, index) }"
+                        :class="{'is-correct-answer': isCorrectAnswerClass(index), 'is-wrong-answer': isWrongAnswerClass(index) }"
                     >
                         {{String.fromCharCode(65+index)}}.
                         <Article :content="option"></Article>
@@ -40,7 +59,7 @@
                         :label="index"
                         border
                         :disabled="isSubmitted"
-                        :class="{'is-correct-answer': isCorrectAnswerClass(currentQuestion.id, index), 'is-wrong-answer': isWrongAnswerClass(currentQuestion.id, index) }"
+                        :class="{'is-correct-answer': isCorrectAnswerClass(index), 'is-wrong-answer': isWrongAnswerClass(index) }"
                     >
                         {{String.fromCharCode(65+index)}}.
                         <Article :content="option"></Article>
@@ -72,10 +91,11 @@ import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
+import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "TakeQuestion",
     components: {
-        Article
+        Article,
     },
     data() {
         return {
@@ -86,13 +106,21 @@ export default {
             showAnswer: false,
             isSubmitted: false,
             questionAnswer: null,
-            correctAnswer: null
+            correctAnswer: null,
+            isCorrect: undefined,
+            authorAvatarUrl: "", // 这个url还没处理过
         };
     },
     computed: {
         isMultiple() {
             return this.currentQuestion.type === "checkbox";
-        }
+        },
+        paperAuthorAvatar() {
+            return showAvatar(this.authorAvatarUrl, "s");
+        },
+        paperAuthorLink() {
+            return authorLink(this.currentQuestion.createUserId);
+        },
     },
     mounted() {
         this.checkLogin();
@@ -104,7 +132,6 @@ export default {
         checkLogin() {
             if (User.isLogin()) {
                 this.getQuestionId();
-                this.getQuestion();
             } else {
                 this.$message.error("请先登录");
                 //1.注销
@@ -116,6 +143,17 @@ export default {
                     User.toLogin();
                 }, 1000);
             }
+        },
+        getAuthorAvatar(uid) {
+            axios(`https://server.jx3box.com/user/info?uid=${uid}`, "GET")
+                .then((response) => {
+                    if (response.code === 10024) {
+                        this.authorAvatarUrl = response.data.avatar;
+                    }
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         },
         getQuestionId() {
             if (this.$route.params.id) {
@@ -134,7 +172,13 @@ export default {
             this.loading = true;
             if (this.$route.params.questionInfo) {
                 this.currentQuestion = this.$route.params.questionInfo;
+                if (this.currentQuestion.type === "checkbox") {
+                    this.chosenOptions = [];
+                } else {
+                    this.chosenOptions = null;
+                }
                 this.loading = false;
+                this.getAuthorAvatar(this.currentQuestion.createUserId);
             } else {
                 this.$message.error("进入方法非法！请从试题列表页重新进入");
                 setTimeout(() => {
@@ -202,7 +246,7 @@ export default {
                 if (value.length === 0) {
                     return false;
                 } else {
-                    answer = value.map(each => {
+                    answer = value.map((each) => {
                         return options[each];
                     });
                 }
@@ -219,11 +263,13 @@ export default {
             this.isSubmitted = true;
             this.loading = true;
             axios(postUrl, "POST", true, answer)
-                .then(response => {
+                .then((response) => {
                     console.log(response);
-                    this.questionAnswer = response.question
+                    this.questionAnswer = response.question;
+                    this.correctAnswer = response.question.answerList;
+                    this.isCorrect = response.right;
                 })
-                .catch(e => {
+                .catch((e) => {
                     this.isSubmitted = false;
                     switch (e.code) {
                         case -1:
@@ -251,29 +297,29 @@ export default {
                     this.loading = false;
                 });
         },
-        isCorrectAnswerClass(qid, idx) {
+        isCorrectAnswerClass(idx) {
             if (this.correctAnswer) {
                 return this.correctAnswer.includes(idx);
             } else {
                 return false;
             }
         },
-        isWrongAnswerClass(qid, idx) {
+        isWrongAnswerClass(idx) {
             if (this.correctAnswer) {
                 if (
                     !this.correctAnswer.includes(idx) &&
-                    this.userAnswers[qid] !== null
+                    this.chosenOptions !== null
                 ) {
-                    if (this.userAnswers[qid] === idx) {
+                    if (this.chosenOptions === idx) {
                         return true;
-                    } else if (typeof this.userAnswers[qid] !== "number") {
-                        return this.userAnswers[qid].includes(idx);
+                    } else if (typeof this.chosenOptions !== "number") {
+                        return this.chosenOptions.includes(idx);
                     }
                 }
             }
             return false;
-        }
-    }
+        },
+    },
 };
 </script>
 

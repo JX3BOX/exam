@@ -65,9 +65,9 @@
             <el-table-column prop="author" label="出题人" width="180">
                 <template slot-scope="scope">
                     {{ scope.row.createUser }}
-                    <span
+                    <!-- <span
                         class="c-question-list-authorid"
-                    >uid: {{scope.row.createUserId}}</span>
+                    >uid: {{scope.row.createUserId}}</span> -->
                 </template>
             </el-table-column>
             <!-- <el-table-column prop="medalAward" label="奖励" width="120"></el-table-column>

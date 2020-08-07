@@ -36,6 +36,7 @@
                 :class="{'el-card__transparent': exam.history && exam.history !== null}"
                 shadow="hover"
                 @click.native.stop="takeExam(exam.id, exam)"
+                :style="{'--tc': themeColor(exam.style), '--tct': themeColorTransparent(exam.style)}" 
             >
                 <div class="c-exam-list-corner" v-if="exam.corner !== ''">{{ corner(exam.corner) }}</div>
                 <div class="c-exam-list-main">
@@ -118,6 +119,15 @@ export default {
                 play: ["副本", "宠物", "家园", "奇遇", "成就"],
                 domain: ["美容", "金融", "医学", "法学"]
             },
+            styleColor: {
+                default: '#2682ea',
+                green: '#66d362',
+                orange: '#f49e40',
+                red: '#ed4948',
+                purple: '#8a52f1'
+            },
+            // themeColor: '#2682ea',
+            // themeColorTransparent: '#2682ea00',
             marks: [{ label: "官方试卷", value: "official" }],
             tagSearch: "",
             nameSearch: "",
@@ -164,6 +174,24 @@ export default {
                 });
                 return tmpCorner;
             };
+        },
+        themeColor() {
+            return styleName => {
+                if (styleName === '') {
+                    return this.styleColor.default
+                } else {
+                    return this.styleColor[styleName]
+                }
+            }
+        },
+        themeColorTransparent() {
+            return styleName => {
+                if (styleName === '') {
+                    return this.styleColor.default + '00'
+                } else {
+                    return this.styleColor[styleName] + '00'
+                }
+            }
         }
     },
     mounted() {
