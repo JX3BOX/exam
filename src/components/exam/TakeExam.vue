@@ -195,6 +195,7 @@ import Extend from "@/components/Extend.vue";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
+import { postStat } from "@/service/stat.js";
 export default {
     name: "TakeExam",
     components: {
@@ -241,6 +242,7 @@ export default {
         this.checkLogin();
         // this.getExamInfo();
         // this.getSolution()
+        postStat('paper',this.$route.params.id)
     },
     methods: {
         checkLogin() {
