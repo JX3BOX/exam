@@ -11,6 +11,7 @@
                 placeholder="选择分类"
                 slot="prepend"
             >
+                <el-option label="全部" value=""></el-option>
                 <el-option-group
                     v-for="group in tagOptions"
                     :key="group.label"
