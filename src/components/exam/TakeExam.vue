@@ -294,7 +294,7 @@ export default {
             getUrl += "?details";
             axios(getUrl, "GET", true)
                 .then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     if (!response.id) {
                         this.$message.error("试卷不存在！");
                         setTimeout(() => {
@@ -610,7 +610,7 @@ export default {
             );
             axios(solutionUrl, "GET", true)
                 .then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     if (response.paper && response.paper.questionDetailList) {
                         // 展示答案，是否正确，已经给选项标上是否正确的标记
                         let qda = response.paper.questionDetailList;
