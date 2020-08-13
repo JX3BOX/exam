@@ -1,7 +1,6 @@
 <template>
     <div class="c-exam">
         <h1 class="c-exam-title">试卷列表</h1>
-        <!-- TODO: 改为级联选择器？ -->
         <el-input placeholder="可选，输入试卷名称" v-model="nameSearch" class="c-exam-filter" @change="searchWithQuery">
             <el-select
                 v-model="tagSearch"
