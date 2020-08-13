@@ -12,8 +12,8 @@ const routes = [
     { name: "exam-take", path: "/paper/:id", component: () => import("../components/exam/TakeExam.vue") },
     { name: "exam-rank", path: "/paper/rank/:id", component: () => import("../components/exam/ExamRank.vue") },
     { name: "question-list", path: "/qlist", component: () => import("../components/question/QuestionList.vue") },
-    { name: "question-take", path: "/question/:id/take", component: () => import("../components/question/TakeQuestion.vue") },
-    { name: "question-specific", path: "/question/:id", component: () => import("../components/question/Question.vue") }
+    { name: "question-take", path: "/question/:id", component: () => import("../components/question/TakeQuestion.vue") },
+    { name: "question-specific", path: "/question/:id/admin", component: () => import("../components/question/Question.vue") }
     // { name: "fn", path: "/fn", component: Fn },
     // { name: "single", path: "/view/:id", component: Single },
 ];

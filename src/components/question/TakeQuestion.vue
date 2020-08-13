@@ -4,13 +4,18 @@
             <h3 class="q-text">
                 <i
                     v-if="isCorrect !== undefined"
-                    :class="{'el-icon-success': isCorrect === true, 'el-icon-error': isCorrect === false}"
+                    :class="{
+                        'el-icon-success': isCorrect === true,
+                        'el-icon-error': isCorrect === false,
+                    }"
                 ></i>
                 <Article :content="currentQuestion.title"></Article>
             </h3>
 
             <div class="q-attr">
-                <span class="q-attr-hint">{{ isMultiple ? "多选题" : "单选题" }}</span>
+                <span class="q-attr-hint">{{
+                    isMultiple ? "多选题" : "单选题"
+                }}</span>
                 <el-rate
                     v-model="currentQuestion.hardStar"
                     disabled
@@ -19,7 +24,11 @@
                 ></el-rate>
                 <span class="q-attr-author">
                     提交人：
-                    <el-link :href="paperAuthorLink" target="_blank" :underline="false">
+                    <el-link
+                        :href="paperAuthorLink"
+                        target="_blank"
+                        :underline="false"
+                    >
                         <el-avatar :src="paperAuthorAvatar"></el-avatar>
                         {{ currentQuestion.createUser }}
                     </el-link>
@@ -31,7 +40,8 @@
                             size="medium"
                             v-for="tag of JSON.parse(currentQuestion.tags)"
                             :key="tag"
-                        >{{tag}}</el-tag>
+                            >{{ tag }}</el-tag
+                        >
                     </span>
                 </span>
             </div>
@@ -39,14 +49,19 @@
             <template v-if="isMultiple">
                 <el-checkbox-group v-model="chosenOptions">
                     <el-checkbox
-                        v-for="(option,index) of JSON.parse(currentQuestion.options)"
+                        v-for="(option, index) of JSON.parse(
+                            currentQuestion.options
+                        )"
                         :key="index"
                         :label="index"
                         border
                         :disabled="isSubmitted"
-                        :class="{'is-correct-answer': isCorrectAnswerClass(index), 'is-wrong-answer': isWrongAnswerClass(index) }"
+                        :class="{
+                            'is-correct-answer': isCorrectAnswerClass(index),
+                            'is-wrong-answer': isWrongAnswerClass(index),
+                        }"
                     >
-                        {{String.fromCharCode(65+index)}}.
+                        {{ String.fromCharCode(65 + index) }}.
                         <Article :content="option"></Article>
                     </el-checkbox>
                 </el-checkbox-group>
@@ -54,14 +69,19 @@
             <template v-else>
                 <el-radio-group v-model="chosenOptions">
                     <el-radio
-                        v-for="(option,index) of JSON.parse(currentQuestion.options)"
+                        v-for="(option, index) of JSON.parse(
+                            currentQuestion.options
+                        )"
                         :key="index"
                         :label="index"
                         border
                         :disabled="isSubmitted"
-                        :class="{'is-correct-answer': isCorrectAnswerClass(index), 'is-wrong-answer': isWrongAnswerClass(index) }"
+                        :class="{
+                            'is-correct-answer': isCorrectAnswerClass(index),
+                            'is-wrong-answer': isWrongAnswerClass(index),
+                        }"
                     >
-                        {{String.fromCharCode(65+index)}}.
+                        {{ String.fromCharCode(65 + index) }}.
                         <Article :content="option"></Article>
                     </el-radio>
                 </el-radio-group>
@@ -72,15 +92,23 @@
                     type="success"
                     @click="preSubmitQuestion"
                     v-if="!isSubmitted && !loading && currentQuestion"
-                    :disabled="chosenOptions === null || JSON.stringify(chosenOptions) === '' || JSON.stringify(chosenOptions) === '[]'"
-                >提交</el-button>
+                    :disabled="
+                        chosenOptions === null ||
+                            JSON.stringify(chosenOptions) === '' ||
+                            JSON.stringify(chosenOptions) === '[]'
+                    "
+                    >提交</el-button
+                >
             </div>
             <!-- <div class="c-exam-take-btn">
                 <el-button type="success" style="float: right;" @click="submitPaper">提交试卷</el-button>
             </div>-->
             <div class="q-whyami" v-if="questionAnswer">
                 <h3>解析</h3>
-                <div v-html="questionAnswer.whyami" class="q-whyami-content"></div>
+                <div
+                    v-html="questionAnswer.whyami"
+                    class="q-whyami-content"
+                ></div>
             </div>
         </div>
     </div>
@@ -92,6 +120,7 @@ import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
+import { postStat } from "@/service/stat.js";
 export default {
     name: "TakeQuestion",
     components: {
@@ -127,6 +156,7 @@ export default {
 
         // this.getQuestionId();
         // this.getUserInfo();
+        postStat('question',this.$route.params.id)
     },
     methods: {
         checkLogin() {
