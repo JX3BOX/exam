@@ -157,7 +157,7 @@ export default {
         },
         getQuestionId() {
             if (this.$route.params.id) {
-                console.log(this.$route);
+                // console.log(this.$route);
                 this.questionid = this.$route.params.id;
                 this.getQuestion();
             } else {
@@ -264,7 +264,7 @@ export default {
             this.loading = true;
             axios(postUrl, "POST", true, answer)
                 .then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     this.questionAnswer = response.question;
                     this.correctAnswer = response.question.answerList;
                     this.isCorrect = response.right;

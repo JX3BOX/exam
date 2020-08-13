@@ -2,7 +2,7 @@
     <div class="c-exam">
         <h1 class="c-exam-title">试卷列表</h1>
         <!-- TODO: 改为级联选择器？ -->
-        <el-input placeholder="可选，输入试卷名称" v-model="nameSearch" class="c-exam-filter">
+        <el-input placeholder="可选，输入试卷名称" v-model="nameSearch" class="c-exam-filter" @change="searchWithQuery">
             <el-select
                 v-model="tagSearch"
                 filterable
@@ -10,6 +10,7 @@
                 default-first-option
                 placeholder="选择分类"
                 slot="prepend"
+                @change="searchWithQuery"
             >
                 <el-option-group
                     v-for="group in tagOptions"
@@ -216,7 +217,7 @@ export default {
             this.loading = true;
             axios(url, "GET", false, [], null, query)
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
                     let page = response.page;
                     if (page.total) {
                         this.total = page.total;
@@ -232,15 +233,14 @@ export default {
                 });
         },
         filterMethod(node, keyword) {
-            console.log(123);
-            console.log(node);
+            // console.log(node);
             this.tagSearch = keyword;
         },
         handleEdit(index, row) {
-            console.log(index, row);
+            // console.log(index, row);
         },
         handleDelete(index, row) {
-            console.log(index, row);
+            // console.log(index, row);
         },
         handleSort({ prop, order }) {
             // 后端排序
@@ -253,7 +253,7 @@ export default {
             }
         },
         takeExam(id, examInfo) {
-            console.log(examInfo)
+            // console.log(examInfo)
             this.$router.push({
                 name: "exam-take",
                 params: { id: id, examInfo: examInfo }

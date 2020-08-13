@@ -2,7 +2,7 @@
     <div class="c-question">
         <h1 class="c-question-title">题目列表</h1>
         <!-- TODO: 改为级联选择器？ -->
-        <el-input placeholder="可选，输入题目名称" v-model="nameSearch" class="c-question-filter">
+        <el-input placeholder="可选，输入题目名称" v-model="nameSearch" class="c-question-filter" @change="searchWithQuery">
             <el-select
                 v-model="tagSearch"
                 filterable
@@ -10,6 +10,7 @@
                 default-first-option
                 placeholder="选择分类"
                 slot="prepend"
+                @change="searchWithQuery"
             >
                 <el-option-group
                     v-for="group in tagOptions"
@@ -193,7 +194,7 @@ export default {
     },
     methods: {
         getQuestionList() {
-            console.log(this.$route);
+            // console.log(this.$route);
             if (this.$route.params.tag) {
                 this.tagSearch = this.$route.params.tag;
             }
@@ -214,7 +215,7 @@ export default {
             this.loading = true;
             axios(url, "GET", false, [], null, query)
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
                     let page = response.page;
                     if (page.total) {
                         this.total = page.total;
@@ -230,15 +231,14 @@ export default {
                 });
         },
         filterMethod(node, keyword) {
-            console.log(123);
-            console.log(node);
+            // console.log(node);
             this.tagSearch = keyword;
         },
         handleEdit(index, row) {
-            console.log(index, row);
+            // console.log(index, row);
         },
         handleDelete(index, row) {
-            console.log(index, row);
+            // console.log(index, row);
         },
         handleSort({ prop, order }) {
             // 后端排序
@@ -251,7 +251,7 @@ export default {
             }
         },
         takeQuestion(row, column, event) {
-            console.log(row.id);
+            // console.log(row.id);
             let id = row.id;
             this.$router.push({
                 name: "question-take",
