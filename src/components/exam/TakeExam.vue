@@ -12,7 +12,6 @@
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
                 <h3>{{examInfo.desc}}</h3>
-                <span v-if="views>=0" style="font-size:18px; color: #24292E; vertical-align: middle;"><i class="el-icon-view">&nbsp;{{views}}</i></span>
                 <p class="c-exam-attr-content">
                     <span class="c-exam-attr-prop">出卷人：</span>
                     <span class="c-exam-attr-value">
@@ -37,6 +36,7 @@
                     <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
                     <span class="c-exam-attr-value">共10题，每题10分，满分100分。</span>
                 </p>
+                <span class="u-views" v-if="views>=0"><i class="el-icon-view">&nbsp;{{views}}</i></span>
                 <QRcode />
                 <span style="margin-left: 10px;">
                     <Sharing
