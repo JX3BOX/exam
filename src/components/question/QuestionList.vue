@@ -1,7 +1,6 @@
 <template>
     <div class="c-question">
         <h1 class="c-question-title">题目列表</h1>
-        <!-- TODO: 改为级联选择器？ -->
         <el-input placeholder="可选，输入题目名称" v-model="nameSearch" class="c-question-filter" @change="searchWithQuery">
             <el-select
                 v-model="tagSearch"
@@ -12,6 +11,7 @@
                 slot="prepend"
                 @change="searchWithQuery"
             >
+                <el-option label="全部" value=""></el-option>
                 <el-option-group
                     v-for="group in tagOptions"
                     :key="group.label"
