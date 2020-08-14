@@ -1,21 +1,20 @@
 .c-exam-take {
-    .pl(50px);
-    .pr(50px);
-    margin: auto -30px;
+    
+}
+.c-exam-take-main {
+    .pr;
     background-color: rgb(245, 248, 248);
-    .pb(50px);
-    .c-exam-take-main {
-        .pr;
+    padding:20px 30px;
+}
+@media screen and (max-width:@ipad){
+    .c-exam-take-main{
+
     }
 }
 .c-exam-take-title {
-    // background-color: rgb(210, 211, 211);
-    .mt(-20px);
-    .pl(30px);
     h1 {
         margin: 0;
-        .lh(3em);
-        .fz(52px);
+        .fz(52px,2);
     }
     .u-mark {
         color: #fff;
@@ -33,6 +32,11 @@
     }
     .bg-magenta {
         background-color: magenta;
+    }
+}
+@media screen and (max-width:@ipad){
+    .c-exam-take-title h1{
+        .fz(1rem,1.5);
     }
 }
 .c-exam-take-attr {
@@ -423,12 +427,6 @@
     }
 }
 
-@media screen and (max-width: 1249px) {
-    .c-exam-take {
-        .pl(10px);
-        .pr(10px);
-    }
-}
 
 @media screen and (max-width: 1023px) {
     .question-row {

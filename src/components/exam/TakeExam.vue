@@ -182,9 +182,10 @@
                 >提交试卷</el-button>
             </div>
         </div>
-        <!-- <RightSidebar>
-            <Extend />
-        </RightSidebar>-->
+        <div class="m-exam-comment">
+            <el-divider content-position="left">讨论</el-divider>
+            <Comment :id="id" category="paper" />
+        </div>
     </div>
 </template>
 
@@ -196,10 +197,11 @@ import { JX3BOX, User } from "@jx3box/jx3box-common";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { postStat } from "@/service/stat.js";
+import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 export default {
     name: "TakeExam",
     components: {
-        // Extend
+        Comment,
         Article,
     },
     data() {
@@ -235,6 +237,9 @@ export default {
         paperAuthorLink() {
             return authorLink(this.examInfo.authorId);
         },
+        id : function (){
+            return this.$route.params.id
+        }
     },
     watch: {},
     mounted() {

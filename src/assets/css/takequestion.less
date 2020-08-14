@@ -1,5 +1,5 @@
 .c-take-question-content {
-    padding: 0 50px;
+    padding: 20px 50px;
     .lh(2em);
     >.c-article-box {
         .fz(20px);
@@ -70,9 +70,6 @@
     }
     .c-exam-take-btn {
         .mt(40px);
-        .el-button {
-            width: 15%;
-        }
     }
     .is-correct-answer {
         background-color: rgb(0,200,0);
@@ -151,6 +148,19 @@
             .c-article {
                 color: #c0c4cc;
             }
+        }
+    }
+}
+@media screen and (max-width:@phone){
+    .c-take-question-content{
+        padding:20px;
+
+        .q-text{
+            margin:0;
+        }
+
+        .el-radio{
+            .w(100%);
         }
     }
 }

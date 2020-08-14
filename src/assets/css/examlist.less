@@ -1,36 +1,22 @@
 .c-exam {
-    padding: 20px;
     max-width: 1260px;
     .auto(x);
+}
+@media screen and (max-width:1259px){
+    .c-exam{
+        padding:0 10px;
+    }
 }
 .c-exam-title {
     font-weight: 300;
     .x;
-    margin: 0;
+    padding-top: 30px;
 }
-// .c-exam-list {
-//     .c-exam-list-title {
-//         .fz(14px);
-//     }
-//     .c-exam-list-desc {
-//         color: #888;
-//         .fz(12px);
-//         white-space: nowrap;
-//         text-overflow: ellipsis;
-//         overflow: hidden;
-//         margin: 0 auto;
-//     }
-//     .c-exam-list-authorid {
-//         .fz(12px);
-//         color: #888;
-//     }
-//     .el-rate__icon {
-//         .mr(0);
-//     }
-// }
 @media screen and (max-width: @phone) {
-    .c-exam {
-        padding: 10px 15px 0 15px;
+    .c-exam-filter{
+        .el-input-group__prepend{
+            .none;
+        }
     }
     .c-exam-title {
         .fz(1.5rem);
@@ -54,7 +40,7 @@
 
 .c-exam-list {
     overflow: visible;
-    .mt(68px);
+    .mt(40px);
     .el-card:hover {
         cursor: pointer;
         &.el-card__transparent {
@@ -62,10 +48,10 @@
         }
     }
     .el-card {
-        width: 400px;
+        width: 100%;
         height: 280px;
         float: left;
-        .ml(15px);
+        // .ml(15px);
         .mb(30px);
         &.el-card__transparent {
             opacity: 0.5;
@@ -106,10 +92,11 @@
             }
         }
         .c-exam-list-desc {
-            .pa;
-            bottom: 0;
-            .mb(0);
-            .w(100%);
+            // .pa;
+            // bottom: 0;
+            // .mb(0);
+            // .w(100%);
+            .mt(10px);
             .c-exam-list-desc-content {
                 padding: 0 20px;
                 height: 60px;
@@ -123,11 +110,10 @@
                 div {
                     color: white;
                     .dbi;
-                    .w(260px);
                     line-height: 30px;
                     vertical-align: top;
-                    .ml(20px);
-                    .fz(15px);
+                    margin:5px 10px;
+                    .fz(13px);
                     word-break: break-all;
                     text-overflow: ellipsis;
                     display: -webkit-inline-box;
@@ -207,11 +193,16 @@
     clear: both;
     .db;
 }
+@media screen and (max-width:1259px){
+    .c-exam-list .el-card .c-exam-list-desc .c-exam-list-desc-content .u-icon{.none;}
+    .c-exam-list .el-col{
+        .w(50%);
+    }
+}
 
-@media screen and (max-width: 913px) {
-    .c-exam-list .el-card {
-        float: initial;
-        margin: 30px auto;
+@media screen and (max-width: @phone) {
+    .c-exam-list .el-col{
+        .w(100%);
     }
 }
 

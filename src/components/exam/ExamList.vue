@@ -1,7 +1,12 @@
 <template>
     <div class="c-exam">
         <h1 class="c-exam-title">试卷列表</h1>
-        <el-input placeholder="可选，输入试卷名称" v-model="nameSearch" class="c-exam-filter" @change="searchWithQuery">
+        <el-input
+            placeholder="输入关键词搜索"
+            v-model="nameSearch"
+            class="c-exam-filter"
+            @change="searchWithQuery"
+        >
             <el-select
                 v-model="tagSearch"
                 filterable
@@ -26,42 +31,74 @@
                 </el-option-group>
             </el-select>
 
-            <el-button slot="append" icon="el-icon-search" @click="searchWithQuery"></el-button>
+            <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="searchWithQuery"
+            ></el-button>
         </el-input>
 
         <div class="c-exam-list">
-            <el-card
-                :body-style="{ padding: '0px', position: 'relative', height: '100%' }"
-                v-for="exam of listData"
-                :key="exam.id"
-                :class="{'el-card__transparent': exam.history && exam.history !== null}"
-                shadow="hover"
-                @click.native.stop="takeExam(exam.id, exam)"
-                :style="{'--tc': themeColor(exam.style), '--tct': themeColorTransparent(exam.style)}" 
-            >
-                <div class="c-exam-list-corner" v-if="exam.corner !== ''">{{ corner(exam.corner) }}</div>
-                <div class="c-exam-list-main">
-                    <div class="c-exam-list-title">{{ exam.title }}</div>
-                    <el-tag
-                        v-for="tag of JSON.parse(exam.tags).slice(0,3)"
-                        :key="tag"
-                        size="small"
-                    >{{tag}}</el-tag>
-                </div>
-                <div class="c-exam-list-desc">
-                    <div class="c-exam-list-desc-content">
-                        <img svg-inline src="../../assets/img/logo.svg" />
-                        <div>{{ exam.desc }}</div>
-                    </div>
-                    <div class="c-exam-list-desc-misc">
-                        <div class="desc-misc-left">出卷人：{{ exam.createUser }}</div>
-                        <div class="desc-misc-right">
-                            难度：
-                            <el-rate v-model="exam.hardStar" disabled text-color="#ff9900"></el-rate>
+            <el-row :gutter="20" >
+                <el-col :span="8" v-for="exam of listData" :key="exam.id"
+                    ><el-card
+                        :body-style="{
+                            padding: '0px',
+                            position: 'relative',
+                            height: '100%',
+                        }"
+                        :class="{
+                            'el-card__transparent':
+                                exam.history && exam.history !== null,
+                        }"
+                        shadow="hover"
+                        @click.native.stop="takeExam(exam.id, exam)"
+                        :style="{
+                            '--tc': themeColor(exam.style),
+                            '--tct': themeColorTransparent(exam.style),
+                        }"
+                    >
+                        <div
+                            class="c-exam-list-corner"
+                            v-if="exam.corner !== ''"
+                        >
+                            {{ corner(exam.corner) }}
                         </div>
-                    </div>
-                </div>
-            </el-card>
+                        <div class="c-exam-list-main">
+                            <div class="c-exam-list-title">
+                                {{ exam.title }}
+                            </div>
+                            <el-tag
+                                v-for="tag of JSON.parse(exam.tags).slice(0, 3)"
+                                :key="tag"
+                                size="small"
+                                >{{ tag }}</el-tag
+                            >
+                        </div>
+                        <div class="c-exam-list-desc">
+                            <div class="c-exam-list-desc-content">
+                                <img class="u-icon"
+                                    svg-inline
+                                    src="../../assets/img/logo.svg"
+                                />
+                                <div>{{ exam.desc }}</div>
+                            </div>
+                            <div class="c-exam-list-desc-misc">
+                                <div class="desc-misc-left">
+                                    出卷人：{{ exam.createUser }}
+                                </div>
+                                <div class="desc-misc-right">
+                                    难度：
+                                    <el-rate
+                                        v-model="exam.hardStar"
+                                        disabled
+                                        text-color="#ff9900"
+                                    ></el-rate>
+                                </div>
+                            </div>
+                        </div> </el-card
+                ></el-col>
+            </el-row>
         </div>
 
         <el-pagination
@@ -102,7 +139,7 @@ export default {
                     "藏剑",
                     "丐帮",
                     "蓬莱",
-                    "凌雪"
+                    "凌雪",
                 ],
                 subject: [
                     "语文",
@@ -114,18 +151,18 @@ export default {
                     "生物",
                     "政治",
                     "历史",
-                    "地理"
+                    "地理",
                 ],
                 game: ["PVE", "PVP", "PVX", "PVBB"],
                 play: ["副本", "宠物", "家园", "奇遇", "成就"],
-                domain: ["美容", "金融", "医学", "法学"]
+                domain: ["美容", "金融", "医学", "法学"],
             },
             styleColor: {
-                default: '#2682ea',
-                green: '#66d362',
-                orange: '#f49e40',
-                red: '#ed4948',
-                purple: '#8a52f1'
+                default: "#2682ea",
+                green: "#66d362",
+                orange: "#f49e40",
+                red: "#ed4948",
+                purple: "#8a52f1",
             },
             // themeColor: '#2682ea',
             // themeColorTransparent: '#2682ea00',
@@ -137,7 +174,7 @@ export default {
             page: 0,
             total: 1,
             pageSize: 15,
-            useQuery: false // 是否使用条件参数查询
+            useQuery: false, // 是否使用条件参数查询
         };
     },
     computed: {
@@ -147,28 +184,28 @@ export default {
                 play: "玩法",
                 school: "门派",
                 subject: "学科",
-                domain: "领域"
+                domain: "领域",
             };
             let tmpOptions = [];
             // label options label value
             for (let key in translate) {
                 tmpOptions.push({
                     label: translate[key],
-                    options: this.tags[key].map(tag => {
+                    options: this.tags[key].map((tag) => {
                         return { label: tag, value: tag };
-                    })
+                    }),
                 });
             }
             return tmpOptions;
         },
         // 获取角标的中文
         corner() {
-            return engCorner => {
+            return (engCorner) => {
                 if (engCorner === "") {
                     return "";
                 }
                 let tmpCorner = null;
-                this.marks.forEach(mark => {
+                this.marks.forEach((mark) => {
                     if (mark.value === engCorner) {
                         tmpCorner = mark.label;
                     }
@@ -177,23 +214,23 @@ export default {
             };
         },
         themeColor() {
-            return styleName => {
-                if (styleName === '') {
-                    return this.styleColor.default
+            return (styleName) => {
+                if (styleName === "") {
+                    return this.styleColor.default;
                 } else {
-                    return this.styleColor[styleName]
+                    return this.styleColor[styleName];
                 }
-            }
+            };
         },
         themeColorTransparent() {
-            return styleName => {
-                if (styleName === '') {
-                    return this.styleColor.default + '00'
+            return (styleName) => {
+                if (styleName === "") {
+                    return this.styleColor.default + "00";
                 } else {
-                    return this.styleColor[styleName] + '00'
+                    return this.styleColor[styleName] + "00";
                 }
-            }
-        }
+            };
+        },
     },
     mounted() {
         this.getExamList();
@@ -216,7 +253,7 @@ export default {
             }
             this.loading = true;
             axios(url, "GET", false, [], null, query)
-                .then(response => {
+                .then((response) => {
                     // console.log(response);
                     let page = response.page;
                     if (page.total) {
@@ -225,7 +262,7 @@ export default {
                     }
                     this.listData = response.data;
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e);
                 })
                 .then(() => {
@@ -256,7 +293,7 @@ export default {
             // console.log(examInfo)
             this.$router.push({
                 name: "exam-take",
-                params: { id: id, examInfo: examInfo }
+                params: { id: id, examInfo: examInfo },
             });
         },
         changePage(i) {
@@ -269,10 +306,10 @@ export default {
         gotoRanking(row) {
             this.$router.push({
                 name: "exam-rank",
-                params: { id: row.id, examInfo: row }
+                params: { id: row.id, examInfo: row },
             });
-        }
-    }
+        },
+    },
 };
 </script>
 

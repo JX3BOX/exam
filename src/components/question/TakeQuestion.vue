@@ -111,6 +111,10 @@
                 ></div>
             </div>
         </div>
+        <div class="m-exam-comment">
+            <el-divider content-position="left">讨论</el-divider>
+            <Comment :id="id" category="question" />
+        </div>
     </div>
 </template>
 
@@ -121,10 +125,12 @@ import { JX3BOX, User } from "@jx3box/jx3box-common";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 import { postStat } from "@/service/stat.js";
+import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 export default {
     name: "TakeQuestion",
     components: {
         Article,
+        Comment,
     },
     data() {
         return {
@@ -150,6 +156,9 @@ export default {
         paperAuthorLink() {
             return authorLink(this.currentQuestion.createUserId);
         },
+        id : function (){
+            return this.$route.params.id
+        }
     },
     mounted() {
         this.checkLogin();
