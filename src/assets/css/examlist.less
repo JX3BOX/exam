@@ -101,25 +101,19 @@
                 padding: 0 20px;
                 height: 60px;
                 background: linear-gradient(90deg, var(--tc) 0, var(--tct) 135%);
-                svg {
+                overflow: hidden;
+                .u-icon{
                     .h(48px);
                     .w(60px);
                     .mt(6px);
                     fill: white;
+                    .fl;
                 }
-                div {
+                .u-text {
                     color: white;
-                    .dbi;
-                    line-height: 30px;
-                    vertical-align: top;
-                    margin:5px 10px;
-                    .fz(13px);
-                    word-break: break-all;
-                    text-overflow: ellipsis;
-                    display: -webkit-inline-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2;
-                    overflow: hidden;
+                    margin:6px 10px;
+                    .fz(13px,1.8);
+                    .break(2);
                 }
             }
         }

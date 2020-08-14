@@ -81,7 +81,7 @@
                                     svg-inline
                                     src="../../assets/img/logo.svg"
                                 />
-                                <div>{{ exam.desc }}</div>
+                                <div class="u-text">{{ exam.desc }}</div>
                             </div>
                             <div class="c-exam-list-desc-misc">
                                 <div class="desc-misc-left">

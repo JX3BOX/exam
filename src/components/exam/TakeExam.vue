@@ -244,7 +244,7 @@ export default {
     watch: {},
     mounted() {
         // // 先判断是否登录
-        this.checkLogin();
+        if(location.hostname != 'localhost') this.checkLogin();
         // this.getExamInfo();
         // this.getSolution()
         postStat('paper',this.$route.params.id)

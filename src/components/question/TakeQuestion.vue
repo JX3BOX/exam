@@ -161,7 +161,7 @@ export default {
         }
     },
     mounted() {
-        this.checkLogin();
+        if(location.hostname != 'localhost') this.checkLogin();
 
         // this.getQuestionId();
         // this.getUserInfo();
