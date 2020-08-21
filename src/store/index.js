@@ -6,7 +6,7 @@ Vue.use(Vuex);
 let store = {
     state: {
         // 模式
-        mode : '',
+        mode : 'list',
 
         // 列表
         subtype : '',
