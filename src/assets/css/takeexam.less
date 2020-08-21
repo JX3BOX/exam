@@ -8,7 +8,7 @@
 }
 @media screen and (max-width:@ipad){
     .c-exam-take-main{
-
+        padding:10px;
     }
 }
 .c-exam-take-title {
@@ -36,7 +36,7 @@
 }
 @media screen and (max-width:@ipad){
     .c-exam-take-title h1{
-        .fz(1rem,1.5);
+        .fz(1.5rem,1.5);
     }
 }
 .c-exam-take-attr {
@@ -77,6 +77,24 @@
     }
     .u-views{
         .mr(10px);
+    }
+}
+@media screen and (max-width:@ipad){
+    .c-exam-take-attr{
+        padding:0;
+
+        h3{
+            .fz(14px);
+            .mt(5px);
+        }
+
+        .el-avatar{
+            .size(24px);
+            .mr(5px);
+        }
+    }
+    .c-exam-take-attr .c-exam-attr-value, .c-exam-take-attr .c-exam-attr-value .el-link--inner,.c-exam-attr-content,.c-exam-attr-value{
+        .fz(14px);
     }
 }
 .c-exam-take-result {
@@ -162,6 +180,21 @@
                 margin: 40px auto 50px auto;
             }
         }
+    }
+}
+@media screen and (max-width:@ipad){
+    .question-row{
+        .mb(20px);
+    }
+    .question-row .el-card{
+        .w(100%);
+        margin:0;
+    }
+    .question-row .el-card.box-card-result{
+        .w(100%);
+        padding:10px;
+        margin: 0 !important;
+        box-sizing: border-box;
     }
 }
 
