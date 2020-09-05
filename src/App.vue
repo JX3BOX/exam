@@ -6,22 +6,19 @@
             slug="exam"
             root="/exam"
             :publishEnable="true"
-            :adminEnable="true"
+            :adminEnable="false"
             :feedbackEnable="true"
         >
             <img slot="logo" svg-inline src="./assets/img/100.svg" />
             <Info />
         </Breadcrumb>
-        <LeftSidebar :open="false">
+        <LeftSidebar>
             <Nav />
         </LeftSidebar>
-        <Main :withoutRight="true" :withoutLeft="true">
+        <Main :withoutRight="true">
             <div class="m-main">
                 <router-view />
             </div>
-            <!-- <RightSidebar>
-                <Extend />
-            </RightSidebar> -->
             <Footer></Footer>
         </Main>
     </div>
@@ -30,8 +27,6 @@
 <script>
 import Info from "@/components/Info.vue";
 import Nav from "@/components/Nav.vue";
-// import Extend from "@/components/Extend.vue";
-// import tabs from "@/components/tabs";
 const { getRewrite } = require("@jx3box/jx3box-common/js/utils");
 
 export default {
@@ -48,8 +43,6 @@ export default {
     components: {
         Info,
         Nav,
-        // Extend,
-        // tabs,
     },
 };
 </script>

@@ -71,12 +71,8 @@
 <script>
 import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
-import Extend from "@/components/Extend.vue";
 export default {
     name: "TakeExam",
-    components: {
-        // Extend
-    },
     data() {
         return {
             loading: false,

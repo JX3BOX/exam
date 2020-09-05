@@ -192,7 +192,6 @@
 <script>
 import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
-import Extend from "@/components/Extend.vue";
 import { JX3BOX, User } from "@jx3box/jx3box-common";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
