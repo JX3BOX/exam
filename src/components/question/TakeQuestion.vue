@@ -165,7 +165,10 @@ export default {
 
         // this.getQuestionId();
         // this.getUserInfo();
-        postStat('question',this.$route.params.id)
+        if(this.$route.name == 'question-take'){
+            postStat('question',this.$route.params.id)
+        }
+        
     },
     methods: {
         checkLogin() {

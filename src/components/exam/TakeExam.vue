@@ -246,7 +246,9 @@ export default {
         if(location.hostname != 'localhost') this.checkLogin();
         // this.getExamInfo();
         // this.getSolution()
-        postStat('paper',this.$route.params.id)
+        if(this.$route.name == 'exam-take'){
+            postStat('paper',this.$route.params.id)
+        }
     },
     methods: {
         checkLogin() {
