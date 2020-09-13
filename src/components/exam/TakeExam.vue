@@ -3,7 +3,7 @@
         <div class="c-exam-take-main">
             <div class="c-exam-take-title">
                 <h1>
-                    《{{examInfo ? examInfo.title : "试卷"}}》
+                    《{{ examInfo ? examInfo.title : "试卷" }}》
                     <!-- <i
                         class="u-mark bg-magenta"
                         v-if="examInfo && examInfo.corner"
@@ -11,13 +11,17 @@
                 </h1>
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
-                <h3>{{examInfo.desc}}</h3>
+                <h3>{{ examInfo.desc }}</h3>
                 <p class="c-exam-attr-content">
                     <span class="c-exam-attr-prop">出卷人：</span>
                     <span class="c-exam-attr-value">
-                        <el-link :href="paperAuthorLink" target="_blank" :underline="false">
+                        <el-link
+                            :href="paperAuthorLink"
+                            target="_blank"
+                            :underline="false"
+                        >
                             <el-avatar :src="paperAuthorAvatar"></el-avatar>
-                            {{examInfo.author}}
+                            {{ examInfo.author }}
                         </el-link>
                     </span>
                 </p>
@@ -28,15 +32,20 @@
                             size="medium"
                             v-for="tag of JSON.parse(examInfo.tags)"
                             :key="tag"
-                        >{{tag}}</el-tag>
+                            >{{ tag }}</el-tag
+                        >
                     </span>
                 </p>
                 <p class="c-exam-attr-content" style="margin-top: -8px;">
                     <span class="c-exam-attr-prop">总共题数：</span>
                     <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
-                    <span class="c-exam-attr-value">共10题，每题10分，满分100分。</span>
+                    <span class="c-exam-attr-value"
+                        >共10题，每题10分，满分100分。</span
+                    >
                 </p>
-                <span class="u-views" v-if="views>=0"><i class="el-icon-view">&nbsp;{{views}}</i></span>
+                <span class="u-views" v-if="views >= 0"
+                    ><i class="el-icon-view">&nbsp;{{ views }}</i></span
+                >
                 <QRcode />
                 <span style="margin-left: 10px;">
                     <Sharing
@@ -54,21 +63,26 @@
                 </span>
             </div>
             <div class="c-exam-take-result" v-if="score !== -1">
-                <p class="result-score">{{score}}</p>
+                <p class="result-score">{{ score }}</p>
                 <p class="result-text">本次得分</p>
             </div>
             <template v-if="questionList.length > 0">
-                <div class="question-row" v-for="(question,index) of questionList" :key="index">
+                <div
+                    class="question-row"
+                    v-for="(question, index) of questionList"
+                    :key="index"
+                >
                     <el-card class="box-card">
                         <div class="card-header">
-                            <div class="card-header-left">{{ index+1 }}</div>
+                            <div class="card-header-left">{{ index + 1 }}</div>
                             <div class="card-header-right">
                                 <span class="q-attr-value">
                                     <el-tag
                                         size="small"
                                         v-for="tag of JSON.parse(question.tags)"
                                         :key="tag"
-                                    >{{tag}}</el-tag>
+                                        >{{ tag }}</el-tag
+                                    >
                                 </span>
                             </div>
                         </div>
@@ -78,39 +92,69 @@
                                 v-if="eachCorrectiveness[question.id] !== undefined"
                                 :class="{'el-icon-success': eachCorrectiveness[question.id], 'el-icon-error': !eachCorrectiveness[question.id]}"
                                 ></i>-->
-                                <span
-                                    class="q-hint"
-                                >[{{ question.type === "checkbox" ? "多选题" : "单选题" }}]</span>
+                                <span class="q-hint"
+                                    >[{{
+                                        question.type === "checkbox"
+                                            ? "多选题"
+                                            : "单选题"
+                                    }}]</span
+                                >
                                 <!-- {{ question.title }} -->
                                 <Article :content="question.title"></Article>
                             </h3>
 
                             <template v-if="question.type === 'checkbox'">
-                                <el-checkbox-group v-model="userAnswers[question.id]">
+                                <el-checkbox-group
+                                    v-model="userAnswers[question.id]"
+                                >
                                     <el-checkbox
-                                        v-for="(option,index) of JSON.parse(question.options)"
+                                        v-for="(option, index) of JSON.parse(
+                                            question.options
+                                        )"
                                         :key="index"
                                         :label="index"
                                         border
                                         :disabled="isSubmitted"
-                                        :class="{'is-correct-answer': isCorrectAnswerClass(question.id, index), 'is-wrong-answer': isWrongAnswerClass(question.id, index) }"
+                                        :class="{
+                                            'is-correct-answer': isCorrectAnswerClass(
+                                                question.id,
+                                                index
+                                            ),
+                                            'is-wrong-answer': isWrongAnswerClass(
+                                                question.id,
+                                                index
+                                            ),
+                                        }"
                                     >
-                                        {{String.fromCharCode(65+index)}}.
+                                        {{ String.fromCharCode(65 + index) }}.
                                         <Article :content="option"></Article>
                                     </el-checkbox>
                                 </el-checkbox-group>
                             </template>
                             <template v-else>
-                                <el-radio-group v-model="userAnswers[question.id]">
+                                <el-radio-group
+                                    v-model="userAnswers[question.id]"
+                                >
                                     <el-radio
-                                        v-for="(option,index) of JSON.parse(question.options)"
+                                        v-for="(option, index) of JSON.parse(
+                                            question.options
+                                        )"
                                         :key="index"
                                         :label="index"
                                         border
                                         :disabled="isSubmitted"
-                                        :class="{'is-correct-answer': isCorrectAnswerClass(question.id, index), 'is-wrong-answer': isWrongAnswerClass(question.id, index) }"
+                                        :class="{
+                                            'is-correct-answer': isCorrectAnswerClass(
+                                                question.id,
+                                                index
+                                            ),
+                                            'is-wrong-answer': isWrongAnswerClass(
+                                                question.id,
+                                                index
+                                            ),
+                                        }"
                                     >
-                                        {{String.fromCharCode(65+index)}}.
+                                        {{ String.fromCharCode(65 + index) }}.
                                         <Article :content="option"></Article>
                                     </el-radio>
                                 </el-radio-group>
@@ -121,9 +165,14 @@
                                     <span class="q-attr-prop">出题人：</span>
                                     <span class="q-attr-value">
                                         <el-link
-                                            :href="getQAuthorLink(question.createUserId)"
+                                            :href="
+                                                getQAuthorLink(
+                                                    question.createUserId
+                                                )
+                                            "
                                             target="_blank"
-                                        >{{ question.createUser }}</el-link>
+                                            >{{ question.createUser }}</el-link
+                                        >
                                     </span>
                                 </p>
 
@@ -154,21 +203,41 @@
                             class="card-result-status"
                             style="color: #F12E2E"
                             v-if="userAnswers[question.id] === null"
-                        >未作答</p>
+                        >
+                            未作答
+                        </p>
                         <p
                             class="card-result-status"
                             style="color: #18CA4E"
                             v-else-if="eachCorrectiveness[question.id]"
-                        >回答正确</p>
-                        <p class="card-result-status" style="color: #F12E2E" v-else>回答错误</p>
+                        >
+                            回答正确
+                        </p>
                         <p
-                            class="card-result-options"
-                        >你的答案：{{ userAnswerDisplayString(question.id) }}</p>
-                        <p
-                            class="card-result-options"
-                        >正确答案：{{ correctAnswers[question.id].map((each) => { return String.fromCharCode(65+each) }).join("") }}</p>
+                            class="card-result-status"
+                            style="color: #F12E2E"
+                            v-else
+                        >
+                            回答错误
+                        </p>
+                        <p class="card-result-options">
+                            你的答案：{{ userAnswerDisplayString(question.id) }}
+                        </p>
+                        <p class="card-result-options">
+                            正确答案：{{
+                                correctAnswers[question.id]
+                                    .map((each) => {
+                                        return String.fromCharCode(65 + each);
+                                    })
+                                    .join("")
+                            }}
+                        </p>
                         <el-divider></el-divider>
-                        <p style="color: #2682EA; font-size: 20px; font-weight: 800;">解析：</p>
+                        <p
+                            style="color: #2682EA; font-size: 20px; font-weight: 800;"
+                        >
+                            解析：
+                        </p>
                         <Article :content="whyami[question.id]"></Article>
                     </el-card>
                 </div>
@@ -179,7 +248,27 @@
                     type="success"
                     @click="preSubmitPaper"
                     v-if="!isSubmitted && !loading && questionList.length > 0"
-                >提交试卷</el-button>
+                    >提交试卷</el-button
+                >
+            </div>
+
+            <div class="m-exam-op" v-if="isAdmin">
+                <el-button
+                    type="warning"
+                    plain
+                    size="small"
+                    icon="el-icon-circle-close"
+                    @click="check('restore')"
+                    >复审</el-button
+                >
+                <el-button
+                    type="danger"
+                    plain
+                    size="small"
+                    icon="el-icon-delete"
+                    @click="check('delete')"
+                    >删除</el-button
+                >
             </div>
         </div>
         <div class="m-exam-comment">
@@ -197,6 +286,7 @@ import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { postStat } from "@/service/stat.js";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
+import { checkPaper } from "@/service/admin.js";
 export default {
     name: "TakeExam",
     components: {
@@ -227,6 +317,8 @@ export default {
             eachCorrectiveness: {},
             whyami: {},
             sharingTitle: "试卷",
+
+            isAdmin: User.getInfo().group > 60,
         };
     },
     computed: {
@@ -236,18 +328,18 @@ export default {
         paperAuthorLink() {
             return authorLink(this.examInfo.authorId);
         },
-        id : function (){
-            return this.$route.params.id
-        }
+        id: function() {
+            return this.$route.params.id;
+        },
     },
     watch: {},
     mounted() {
         // // 先判断是否登录
-        if(location.hostname != 'localhost') this.checkLogin();
+        if (location.hostname != "localhost") this.checkLogin();
         // this.getExamInfo();
         // this.getSolution()
-        if(this.$route.name == 'exam-take'){
-            postStat('paper',this.$route.params.id)
+        if (this.$route.name == "exam-take") {
+            postStat("paper", this.$route.params.id);
         }
     },
     methods: {
@@ -400,8 +492,8 @@ export default {
             getStatsUrl += "/stat";
             axios(getStatsUrl, "GET", true)
                 .then((response) => {
-                    if ('views' in response) {
-                        this.views = response.views
+                    if ("views" in response) {
+                        this.views = response.views;
                     }
                 })
                 .catch((e) => {
@@ -708,6 +800,33 @@ export default {
         // loadQuestionUserAnswer() {
 
         // }
+
+        check: function(action) {
+            if (action == "delete") {
+                this.$alert("确定删除吗", "消息", {
+                    confirmButtonText: "确定",
+                    callback: (pop) => {
+                        if (pop == "confirm") {
+                            checkPaper(this.id, action).then((res) => {
+                                this.$message({
+                                    message: res.data.msg || "操作成功",
+                                    type: "success",
+                                });
+                                location.reload();
+                            });
+                        }
+                    },
+                });
+            } else {
+                checkPaper(this.id, action).then((res) => {
+                    this.$message({
+                        message: res.data.msg || "操作成功",
+                        type: "success",
+                    });
+                    location.reload();
+                });
+            }
+        },
     },
 };
 </script>

@@ -100,9 +100,6 @@
                     >提交</el-button
                 >
             </div>
-            <!-- <div class="c-exam-take-btn">
-                <el-button type="success" style="float: right;" @click="submitPaper">提交试卷</el-button>
-            </div>-->
             <div class="q-whyami" v-if="questionAnswer">
                 <h3>解析</h3>
                 <div
@@ -110,9 +107,30 @@
                     class="q-whyami-content"
                 ></div>
             </div>
+
+            <div class="m-exam-op" v-if="isAdmin">
+                <el-button
+                    type="warning"
+                    plain
+                    size="small"
+                    icon="el-icon-circle-close"
+                    @click="check('restore')"
+                    >复审</el-button
+                >
+                <el-button
+                    type="danger"
+                    plain
+                    size="small"
+                    icon="el-icon-delete"
+                    @click="check('delete')"
+                    >删除</el-button
+                >
+            </div>
         </div>
         <div class="m-exam-comment">
-            <el-divider content-position="left">讨论</el-divider>
+            <el-divider content-position="left"
+                ><i class="el-icon-chat-line-square"></i> 讨论</el-divider
+            >
             <Comment :id="id" category="question" />
         </div>
     </div>
@@ -126,6 +144,7 @@ import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 import { postStat } from "@/service/stat.js";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
+import { checkQuestion } from "@/service/admin.js";
 export default {
     name: "TakeQuestion",
     components: {
@@ -144,6 +163,7 @@ export default {
             correctAnswer: null,
             isCorrect: undefined,
             authorAvatarUrl: "", // 这个url还没处理过
+            isAdmin: User.getInfo().group > 60,
         };
     },
     computed: {
@@ -156,19 +176,18 @@ export default {
         paperAuthorLink() {
             return authorLink(this.currentQuestion.createUserId);
         },
-        id : function (){
-            return this.$route.params.id
-        }
+        id: function() {
+            return this.$route.params.id;
+        },
     },
     mounted() {
-        if(location.hostname != 'localhost') this.checkLogin();
+        if (location.hostname != "localhost") this.checkLogin();
 
         // this.getQuestionId();
         // this.getUserInfo();
-        if(this.$route.name == 'question-take'){
-            postStat('question',this.$route.params.id)
+        if (this.$route.name == "question-take") {
+            postStat("question", this.$route.params.id);
         }
-        
     },
     methods: {
         checkLogin() {
@@ -360,6 +379,33 @@ export default {
                 }
             }
             return false;
+        },
+
+        check: function(action) {
+            if (action == "delete") {
+                this.$alert("确定删除吗", "消息", {
+                    confirmButtonText: "确定",
+                    callback: (pop) => {
+                        if (pop == "confirm") {
+                            checkQuestion(this.id, action).then((res) => {
+                                this.$message({
+                                    message: res.data.msg || "操作成功",
+                                    type: "success",
+                                });
+                                location.reload();
+                            });
+                        }
+                    },
+                });
+            } else {
+                checkQuestion(this.id, action).then((res) => {
+                    this.$message({
+                        message: res.data.msg || "操作成功",
+                        type: "success",
+                    });
+                    location.reload();
+                });
+            }
         },
     },
 };

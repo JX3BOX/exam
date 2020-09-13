@@ -2,13 +2,13 @@
     <nav class="m-nav">
         <h5 class="u-title">题库中心</h5>
         <div class="m-nav-group">
-            <router-link class="u-item" to="/list">
-                <i class="el-icon-s-order"></i>
-                <span>全部试卷</span>
-            </router-link>
             <router-link class="u-item" to="/qlist">
                 <i class="el-icon-s-order"></i>
                 <span>全部题目</span>
+            </router-link>
+            <router-link class="u-item" to="/list">
+                <i class="el-icon-s-order"></i>
+                <span>全部试卷</span>
             </router-link>
         </div>
 
