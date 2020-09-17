@@ -161,7 +161,7 @@
                             </template>
 
                             <div class="q-attr">
-                                <p class="q-attr-content">
+                                <p class="q-attr-content u-author">
                                     <span class="q-attr-prop">出题人：</span>
                                     <span class="q-attr-value">
                                         <el-link
@@ -176,7 +176,7 @@
                                     </span>
                                 </p>
 
-                                <p class="q-attr-content">
+                                <p class="q-attr-content u-hardstar">
                                     <span class="q-attr-prop">难度：</span>
                                     <span class="q-attr-value">
                                         <el-rate
