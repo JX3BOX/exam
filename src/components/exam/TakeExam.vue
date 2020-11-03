@@ -468,37 +468,9 @@ export default {
                     // this.loadQuestion();
                 })
                 .catch((e) => {
-                    switch (e.code) {
-                        case -1:
-                            // 网络异常
-                            this.$message.error(e.msg);
-                            break;
-                        case 404:
-                            this.loading = true;
-                            this.$message.error("试卷不存在！");
-                            setTimeout(() => {
-                                this.$router.replace("/list");
-                            }, 1000);
-
-                            break;
-                        case 9999:
-                            this.$message.error("登录失效, 请重新登录");
-                            //1.注销
-                            User.destroy();
-                            //2.保存未提交成功的信息
-                            //请保存至IndexedDB,勿占用localstorage
-                            //3.跳转至登录页携带redirect
-                            setTimeout(() => {
-                                User.toLogin();
-                            }, 1000);
-                            //不指定url时则自动跳回当前所在页面
-                            break;
-                        default:
-                            // 服务器错误
-                            this.$message.error(`[${e.code}]${e.msg}`);
-                    }
+                    console.log(e)
                 })
-                .then(() => {
+                .finally(() => {
                     this.loading = false;
                 });
         },
