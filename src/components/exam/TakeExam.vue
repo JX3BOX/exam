@@ -20,7 +20,7 @@
                             target="_blank"
                             :underline="false"
                         >
-                            <el-avatar :src="paperAuthorAvatar"></el-avatar>
+                            <!-- <el-avatar :src="paperAuthorAvatar"></el-avatar> -->
                             {{ examInfo.author }}
                         </el-link>
                     </span>
@@ -252,8 +252,17 @@
                 >
             </div>
 
-            <div class="m-exam-op" v-if="isAdmin">
+            <div class="m-exam-op">
                 <el-button
+                    type="primary"
+                    plain
+                    size="small"
+                    icon="el-icon-edit-outline"
+                    @click="edit"
+                    >编辑</el-button
+                >
+                <el-button
+                    v-if="isAdmin"
                     type="warning"
                     plain
                     size="small"
@@ -262,6 +271,7 @@
                     >复审</el-button
                 >
                 <el-button
+                    v-if="isAdmin"
                     type="danger"
                     plain
                     size="small"
@@ -287,6 +297,7 @@ import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { postStat } from "@/service/stat.js";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 import { checkPaper } from "@/service/admin.js";
+import { $next } from "@jx3box/jx3box-common/js/axios";
 export default {
     name: "TakeExam",
     components: {
@@ -335,8 +346,11 @@ export default {
     watch: {},
     mounted() {
         // // 先判断是否登录
-        if (location.hostname != "localhost") this.checkLogin();
-        // this.getExamInfo();
+        if (location.hostname != "localhost"){
+            this.checkLogin();
+        }else{
+            this.getExamInfo();
+        }
         // this.getSolution()
         if (this.$route.name == "exam-take") {
             postStat("paper", this.$route.params.id);
@@ -361,17 +375,15 @@ export default {
         getAuthorAvatar(uid) {
             axios(`https://server.jx3box.com/user/info?uid=${uid}`, "GET")
                 .then((response) => {
-                    if (response.code === 10024) {
-                        this.authorAvatarUrl = response.data.avatar;
-                    }
+                    this.authorAvatarUrl = response.data.avatar;
                 })
                 .catch((e) => {
                     console.log(e);
                 });
         },
         getExamInfo() {
-            if (this.$route.params.id) {
-                this.examid = this.$route.params.id;
+            if (this.id) {
+                this.examid = this.id;
             } else {
                 this.$message.error("试卷不存在！");
                 setTimeout(() => {
@@ -387,10 +399,9 @@ export default {
 
             // 获取试卷信息
             this.loading = true;
-            let getUrl = realUrl(__next, "api/question/user-exam-paper/");
-            getUrl += this.examid;
-            getUrl += "?details";
-            axios(getUrl, "GET", true)
+
+            $next
+                .get("api/question/user-exam-paper/" + this.examid + "?details")
                 .then((response) => {
                     // console.log(response);
                     if (!response.id) {
@@ -419,7 +430,7 @@ export default {
                         author: response.createUser,
                         authorId: response.createUserId,
                     };
-                    this.getAuthorAvatar(response.createUserId);
+                    // this.getAuthorAvatar(response.createUserId);
                     this.questionIdList = response.questionIdList;
                     let questions = response.questionDetailList;
 
@@ -440,7 +451,6 @@ export default {
                         ? this.examInfo.title
                         : "试卷";
 
-                    this.postStats();
                     this.getStats();
 
                     // // this.currentQuestionNumber = 1;
@@ -550,21 +560,6 @@ export default {
                     }
                 });
         },
-        // // 加载题目
-        // loadQuestion() {
-        //     this.currentQuestion = this.questionList[
-        //         this.currentQuestionNumber - 1
-        //     ];
-        //     this.isMultiple = this.currentQuestion.type === "checkbox";
-        // },
-        // isAttemped(count) {
-        //     let questionid = this.questionIdList[count - 1];
-        //     return (
-        //         this.userAnswers[questionid] !== null &&
-        //         this.userAnswers[questionid] !== "" &&
-        //         this.userAnswers[questionid] !== undefined
-        //     );
-        // },
         preSubmitPaper() {
             // 提交试卷前的检查
             let finalAnswers = {};
@@ -826,6 +821,9 @@ export default {
                     location.reload();
                 });
             }
+        },
+        edit: function() {
+            location.href = 'https://www.jx3box.com/dashboard/publish/#/exam/paper/' + this.id
         },
     },
 };
