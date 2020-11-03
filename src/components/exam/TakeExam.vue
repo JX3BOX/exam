@@ -253,7 +253,7 @@
             </div>
 
             <div class="m-exam-op">
-                <el-button
+                <el-button v-if="isAuthor"
                     type="primary"
                     plain
                     size="small"
@@ -297,7 +297,7 @@ import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { postStat } from "@/service/stat.js";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 import { checkPaper } from "@/service/admin.js";
-import { $next } from "@jx3box/jx3box-common/js/axios";
+import { $next } from "@/service/axios.js";
 export default {
     name: "TakeExam",
     components: {
@@ -330,6 +330,7 @@ export default {
             sharingTitle: "试卷",
 
             isAdmin: User.getInfo().group > 60,
+            author_id : ''
         };
     },
     computed: {
@@ -342,6 +343,9 @@ export default {
         id: function() {
             return this.$route.params.id;
         },
+        isAuthor : function (){
+            return User.getInfo().uid == this.author_id
+        }
     },
     watch: {},
     mounted() {
@@ -382,16 +386,17 @@ export default {
                 });
         },
         getExamInfo() {
-            if (this.id) {
-                this.examid = this.id;
-            } else {
-                this.$message.error("试卷不存在！");
-                setTimeout(() => {
-                    this.$router.replace("/list");
-                }, 2000);
-                return false;
-            }
+            // if (this.id) {
+                
+            // } else {
+            //     this.$message.error("试卷不存在！");
+            //     setTimeout(() => {
+            //         this.$router.replace("/list");
+            //     }, 2000);
+            //     return false;
+            // }
 
+            this.examid = this.id;
             let params = this.$route.params;
             if (params) {
                 this.examInfo = params.examInfo;
@@ -403,15 +408,16 @@ export default {
             $next
                 .get("api/question/user-exam-paper/" + this.examid + "?details")
                 .then((response) => {
-                    // console.log(response);
-                    if (!response.id) {
-                        this.$message.error("试卷不存在！");
-                        setTimeout(() => {
-                            this.$router.replace("/list");
-                        }, 1000);
-                        return false;
-                    }
+                    response = response.data
+                    // if (!response.id) {
+                    //     this.$message.error("试卷不存在！");
+                    //     setTimeout(() => {
+                    //         this.$router.replace("/list");
+                    //     }, 1000);
+                    //     return false;
+                    // }
                     this.examid = response.id;
+                    this.author_id = response.createUserId
 
                     // 获取角标的中文
                     let tmpMark = null;
