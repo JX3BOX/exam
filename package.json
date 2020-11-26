@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@jx3box/jx3box-comment-ui": "^1.2.9",
-    "@jx3box/jx3box-common": "^5.4.2",
-    "@jx3box/jx3box-common-ui": "^2.7.4",
-    "@jx3box/jx3box-editor": "^0.2.8",
+    "@jx3box/jx3box-common": "^5.4.3",
+    "@jx3box/jx3box-common-ui": "^2.7.7",
+    "@jx3box/jx3box-editor": "^0.3.9",
     "axios": "^0.19.2",
     "core-js": "^3.4.3",
     "element-ui": "^2.13.0",
@@ -24,7 +24,7 @@
     "vuex": "^3.1.2"
   },
   "devDependencies": {
-    "@babel/compat-data": "^7.10.1",
+    "@babel/compat-data": "^7.12.5",
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
     "@vue/cli-plugin-router": "^4.0.0",
