@@ -181,7 +181,7 @@ export default {
         paperAuthorLink() {
             return authorLink(this.currentQuestion.createUserId);
         },
-        id: function() {
+        id() {
             return this.$route.params.id;
         },
     },
