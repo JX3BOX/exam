@@ -253,6 +253,11 @@
             </div>
 
             <div class="m-exam-op">
+                <Fav
+                    style="padding-top:9px;padding-bottom:9px"
+                    post-type="paper"
+                    :post-id="examInfo.id"
+                />
                 <el-button v-if="isAuthor"
                     type="primary"
                     plain
@@ -344,7 +349,7 @@ export default {
             return this.$route.params.id;
         },
         isAuthor : function (){
-            return User.getInfo().uid == this.author_id
+            return User.isLogin() && User.getInfo().uid == this.author_id
         }
     },
     watch: {},

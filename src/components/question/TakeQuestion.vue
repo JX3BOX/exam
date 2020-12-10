@@ -109,6 +109,11 @@
             </div>
 
             <div class="m-exam-op" v-if="isAdmin">
+                <Fav
+                    style="padding-top:9px;padding-bottom:9px"
+                    post-type="question"
+                    :post-id="currentQuestion.id"
+                />
                 <el-button
                     type="warning"
                     plain
