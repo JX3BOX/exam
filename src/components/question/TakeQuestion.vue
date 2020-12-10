@@ -112,7 +112,7 @@
                 <Fav
                     style="padding-top:9px;padding-bottom:9px"
                     post-type="question"
-                    :post-id="currentQuestion.id"
+                    :post-id="id"
                 />
                 <el-button
                     type="warning"

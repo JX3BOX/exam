@@ -256,7 +256,7 @@
                 <Fav
                     style="padding-top:9px;padding-bottom:9px"
                     post-type="paper"
-                    :post-id="examInfo.id"
+                    :post-id="id"
                 />
                 <el-button v-if="isAuthor"
                     type="primary"
