@@ -36,7 +36,7 @@
                         >
                     </span>
                 </p>
-                <p class="c-exam-attr-content" style="margin-top: -8px;">
+                <p class="c-exam-attr-content" style="margin-top: -8px">
                     <span class="c-exam-attr-prop">总共题数：</span>
                     <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
                     <span class="c-exam-attr-value"
@@ -47,7 +47,7 @@
                     ><i class="el-icon-view">&nbsp;{{ views }}</i></span
                 >
                 <QRcode />
-                <span style="margin-left: 10px;">
+                <span style="margin-left: 10px">
                     <Sharing
                         :title="sharingTitle"
                         img="./assets/img/100.svg"
@@ -201,21 +201,21 @@
                     >
                         <p
                             class="card-result-status"
-                            style="color: #F12E2E"
+                            style="color: #f12e2e"
                             v-if="userAnswers[question.id] === null"
                         >
                             未作答
                         </p>
                         <p
                             class="card-result-status"
-                            style="color: #18CA4E"
+                            style="color: #18ca4e"
                             v-else-if="eachCorrectiveness[question.id]"
                         >
                             回答正确
                         </p>
                         <p
                             class="card-result-status"
-                            style="color: #F12E2E"
+                            style="color: #f12e2e"
                             v-else
                         >
                             回答错误
@@ -234,7 +234,11 @@
                         </p>
                         <el-divider></el-divider>
                         <p
-                            style="color: #2682EA; font-size: 20px; font-weight: 800;"
+                            style="
+                                color: #2682ea;
+                                font-size: 20px;
+                                font-weight: 800;
+                            "
                         >
                             解析：
                         </p>
@@ -254,11 +258,12 @@
 
             <div class="m-exam-op">
                 <Fav
-                    style="padding-top:9px;padding-bottom:9px"
+                    style="padding-top: 9px; padding-bottom: 9px"
                     post-type="paper"
                     :post-id="id"
                 />
-                <el-button v-if="isAuthor"
+                <el-button
+                    v-if="isAuthor"
                     type="primary"
                     plain
                     size="small"
@@ -335,7 +340,7 @@ export default {
             sharingTitle: "试卷",
 
             isAdmin: User.getInfo().group > 60,
-            author_id : ''
+            author_id: "",
         };
     },
     computed: {
@@ -345,22 +350,38 @@ export default {
         paperAuthorLink() {
             return authorLink(this.examInfo.authorId);
         },
-        id: function() {
+        id: function () {
             return this.$route.params.id;
         },
-        isAuthor : function (){
-            return User.isLogin() && User.getInfo().uid == this.author_id
-        }
+        isAuthor: function () {
+            return User.isLogin() && User.getInfo().uid == this.author_id;
+        },
     },
-    watch: {},
+    watch: {
+        userAnswers: {
+            handler(newVal, oldValue) {
+                if (
+                    Object.keys(this.generateFinalAnswer().finalAnswers)
+                        .length !== 0
+                ) {
+                    // 这个时候判断是否登录
+                    if (location.hostname != "localhost") {
+                        this.checkLogin();
+                    }
+                }
+            },
+            deep: true,
+        },
+    },
     mounted() {
-        // // 先判断是否登录
-        if (location.hostname != "localhost"){
-            this.checkLogin();
-        }else{
-            this.getExamInfo();
-        }
+        // 不先判断是否登录
+        // if (location.hostname != "localhost"){
+        //     this.checkLogin();
+        // }else{
+        //     this.getExamInfo();
+        // }
         // this.getSolution()
+        this.getExamInfo();
         if (this.$route.name == "exam-take") {
             postStat("paper", this.$route.params.id);
         }
@@ -392,7 +413,7 @@ export default {
         },
         getExamInfo() {
             // if (this.id) {
-                
+
             // } else {
             //     this.$message.error("试卷不存在！");
             //     setTimeout(() => {
@@ -413,7 +434,7 @@ export default {
             $next
                 .get("api/question/user-exam-paper/" + this.examid + "?details")
                 .then((response) => {
-                    response = response.data
+                    response = response.data;
                     // if (!response.id) {
                     //     this.$message.error("试卷不存在！");
                     //     setTimeout(() => {
@@ -422,7 +443,7 @@ export default {
                     //     return false;
                     // }
                     this.examid = response.id;
-                    this.author_id = response.createUserId
+                    this.author_id = response.createUserId;
 
                     // 获取角标的中文
                     let tmpMark = null;
@@ -473,7 +494,7 @@ export default {
                     // this.loadQuestion();
                 })
                 .catch((e) => {
-                    console.log(e)
+                    console.log(e);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -543,12 +564,10 @@ export default {
                     }
                 });
         },
-        preSubmitPaper() {
-            // 提交试卷前的检查
+        generateFinalAnswer() {
+            // 拼接最终答案
             let finalAnswers = {};
             let isFinished = true;
-
-            // 拼接最终答案
             for (let key in this.userAnswers) {
                 let value = this.userAnswers[key];
                 let options = [];
@@ -576,6 +595,17 @@ export default {
                     finalAnswers[key] = [options[value]];
                 }
             }
+
+            return {
+                finalAnswers: finalAnswers,
+                isFinished: isFinished,
+            };
+        },
+        preSubmitPaper() {
+            // 提交试卷前的检查
+            let generatedResult = this.generateFinalAnswer();
+            let finalAnswers = generatedResult.finalAnswers;
+            let isFinished = generatedResult.isFinished;
 
             // 如果有空的题目，提示是否要直接提交。但是不允许提交空白试卷
             if (!isFinished) {
@@ -779,7 +809,7 @@ export default {
 
         // }
 
-        check: function(action) {
+        check: function (action) {
             if (action == "delete") {
                 this.$alert("确定删除吗", "消息", {
                     confirmButtonText: "确定",
@@ -805,8 +835,10 @@ export default {
                 });
             }
         },
-        edit: function() {
-            location.href = 'https://www.jx3box.com/dashboard/publish/#/exam/paper/' + this.id
+        edit: function () {
+            location.href =
+                "https://www.jx3box.com/dashboard/publish/#/exam/paper/" +
+                this.id;
         },
     },
 };
