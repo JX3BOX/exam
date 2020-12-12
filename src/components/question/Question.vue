@@ -94,7 +94,7 @@ export default {
                 this.getQuestion();
                 return true;
             } else {
-                this.$router.replace(`/question/${this.questionid}/take`)
+                this.$router.replace(`/question/${this.questionid}`)
                 return false;
             }
         },

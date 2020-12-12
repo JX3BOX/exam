@@ -90,12 +90,12 @@
             <div class="c-exam-take-btn">
                 <el-button
                     type="success"
-                    @click="preSubmitQuestion"
+                    @click="checkLogin"
                     v-if="!isSubmitted && !loading && currentQuestion"
                     :disabled="
                         chosenOptions === null ||
-                            JSON.stringify(chosenOptions) === '' ||
-                            JSON.stringify(chosenOptions) === '[]'
+                        JSON.stringify(chosenOptions) === '' ||
+                        JSON.stringify(chosenOptions) === '[]'
                     "
                     >提交</el-button
                 >
@@ -110,7 +110,7 @@
 
             <div class="m-exam-op" v-if="isAdmin">
                 <Fav
-                    style="padding-top:9px;padding-bottom:9px"
+                    style="padding-top: 9px; padding-bottom: 9px"
                     post-type="question"
                     :post-id="id"
                 />
@@ -186,29 +186,33 @@ export default {
         },
     },
     mounted() {
-        if (location.hostname != "localhost") this.checkLogin();
-
-        // this.getQuestionId();
-        // this.getUserInfo();
+        // 先不检查登录
+        // if (location.hostname != "localhost") {
+        //     this.checkLogin();
+        // }
         if (this.$route.name == "question-take") {
             postStat("question", this.$route.params.id);
         }
+        this.getQuestionId();
     },
     methods: {
         checkLogin() {
-            if (User.isLogin()) {
-                this.getQuestionId();
-            } else {
-                this.$message.error("请先登录");
-                //1.注销
-                User.destroy();
-                //2.保存未提交成功的信息
-                //请保存至IndexedDB,勿占用localstorage
-                //3.跳转至登录页携带redirect
-                setTimeout(() => {
-                    User.toLogin();
-                }, 1000);
+            // 检查登录
+            if (location.hostname != "localhost") {
+                if (!User.isLogin()) {
+                    this.$message.error("请先登录");
+                    //1.注销
+                    User.destroy();
+                    //2.保存未提交成功的信息
+                    //请保存至IndexedDB,勿占用localstorage
+                    //3.跳转至登录页携带redirect
+                    setTimeout(() => {
+                        User.toLogin();
+                    }, 1000);
+                    return false
+                }
             }
+            this.preSubmitQuestion()
         },
         getAuthorAvatar(uid) {
             axios(`https://server.jx3box.com/user/info?uid=${uid}`, "GET")
@@ -234,73 +238,61 @@ export default {
                 return false;
             }
         },
-        getQuestion() {
+        async getRemoteQuestionInfo() {
+            let getUrl = realUrl(
+                __next,
+                `api/question/${this.questionid}/no-answer`
+            );
+
+            return await axios(getUrl, "GET", true)
+                .then((response) => {
+                    if (!response.id) {
+                        this.$message.error("题目不存在！");
+                        setTimeout(() => {
+                            this.$router.go("-1");
+                        }, 1000);
+                        return false;
+                    }
+                    return Promise.resolve(response);
+                })
+                .catch((e) => {
+                    console.log(e);
+                    return Promise.reject(e);
+                });
+        },
+        async getQuestion() {
             this.loading = true;
+            console.log(this.$route);
             if (this.$route.params.questionInfo) {
                 this.currentQuestion = this.$route.params.questionInfo;
-                if (this.currentQuestion.type === "checkbox") {
-                    this.chosenOptions = [];
-                } else {
-                    this.chosenOptions = null;
-                }
-                this.loading = false;
-                this.getAuthorAvatar(this.currentQuestion.createUserId);
             } else {
-                this.$message.error("进入方法非法！请从试题列表页重新进入");
-                setTimeout(() => {
-                    this.$router.replace("/qlist");
-                }, 1000);
-                return false;
+                // this.$message.error("进入方法非法！请从试题列表页重新进入");
+                // setTimeout(() => {
+                //     this.$router.replace("/qlist");
+                // }, 1000);
+                // return false;
+                try {
+                    this.currentQuestion = await this.getRemoteQuestionInfo();
+                } catch (error) {
+                    if (error.msg) {
+                        this.$message.error("题目不存在！");
+                        setTimeout(() => {
+                            this.$router.replace("/qlist");
+                        }, 1000);
+                    }
+                    return false;
+                }
             }
+            if (this.currentQuestion.type === "checkbox") {
+                this.chosenOptions = [];
+            } else {
+                this.chosenOptions = null;
+            }
+            this.loading = false;
+            this.getAuthorAvatar(this.currentQuestion.createUserId);
 
             // let getUrl = __next + "api/question/user-exam-paper/q/:questionId"
             // let getUrl = "/api/question/user-exam-paper/q/";
-            // let getUrl = realUrl(__next, "api/question/");
-            // getUrl += this.questionid;
-
-            // axios(getUrl, "GET", true)
-            //     .then(response => {
-            //         console.log(response);
-            //         if (!response.id) {
-            //             this.$message.error("题目不存在！");
-            //             setTimeout(() => {
-            //                 this.$router.go("-1");
-            //             }, 1000);
-            //             return false;
-            //         }
-            //         this.currentQuestion = response;
-            //         if (this.currentQuestion.type === "checkbox") {
-            //             this.chosenOptions = [];
-            //         } else {
-            //             this.chosenOptions = null;
-            //         }
-            //         // this.examid = response.id;
-            //         // this.examInfo = {
-            //         //     category: response.category,
-            //         //     corner: response.corner,
-            //         //     desc: response.desc,
-            //         //     medalAward: response.medalAward,
-            //         //     title: response.title,
-            //         //     tags: response.tags
-            //         // };
-            //         // this.questionIdList = response.questionIdList;
-            //         // this.questionList = response.questionDetailList;
-            //         // this.questionCount = this.questionIdList.length;
-
-            //         // this.currentQuestionNumber = 1;
-            //         // if (this.questionList[0].type === "checkbox") {
-            //         //     this.chosenOptions = []
-            //         // } else {
-            //         //     this.chosenOptions = null
-            //         // }
-            //         // this.loadQuestion();
-            //     })
-            //     .catch(e => {
-            //         console.log(e);
-            //     })
-            //     .then(() => {
-            //         this.loading = false;
-            //     });
         },
         preSubmitQuestion() {
             let answer = [];
@@ -337,13 +329,14 @@ export default {
                 })
                 .catch((e) => {
                     this.isSubmitted = false;
+                    console.log(e)
                     switch (e.code) {
                         case -1:
                             // 网络异常
                             this.$message.error(e.msg);
                             break;
-                        case 9999:
-                            this.$message.error("登录失效, 请重新登录");
+                        case 401:
+                            this.$message.error(e.msg);
                             //1.注销
                             User.destroy();
                             //2.保存未提交成功的信息
@@ -386,7 +379,7 @@ export default {
             return false;
         },
 
-        check: function(action) {
+        check: function (action) {
             if (action == "delete") {
                 this.$alert("确定删除吗", "消息", {
                     confirmButtonText: "确定",
