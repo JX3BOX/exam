@@ -14,7 +14,7 @@ function getStat(type,id) {
         });
 }
 
-const actions = __next + "api/summary-any/";
+const actions = (process.env.NODE_ENV === "production" ? __next : "/") + "api/summary-any/";
 // const actions = "/api/summary-any/";
 function postStat(type,id) {
     return axios.get(actions + type + '-' + id, {
