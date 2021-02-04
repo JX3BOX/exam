@@ -388,9 +388,7 @@ export default {
     },
     methods: {
         checkLogin() {
-            if (User.isLogin()) {
-                this.getExamInfo();
-            } else {
+            if (!User.isLogin()) {
                 this.$message.error("请先登录");
                 //1.注销
                 User.destroy();
