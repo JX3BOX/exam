@@ -29,7 +29,7 @@
 
 <script>
 import { axios, realUrl } from "@/service/api.js";
-import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
+import { __next } from "@jx3box/jx3box-common/data/jx3box.json";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "ExamRank",

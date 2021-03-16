@@ -1,5 +1,5 @@
 import axios from "axios";
-import { __server } from "@jx3box/jx3box-common/js/jx3box.json";
+import { __server } from "@jx3box/jx3box-common/data/jx3box.json";
 const API_LIST = __server + "post/list";
 const API_SINGLE = __server + "post/find";
 import failCallback from '../utils/fail'
