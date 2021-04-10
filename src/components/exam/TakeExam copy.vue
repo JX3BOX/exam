@@ -9,6 +9,7 @@
                         v-if="examInfo && examInfo.corner"
                     >{{examInfo.corner}}</i>
                 </h1>
+                
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
                 <h3>{{examInfo.desc}}</h3>

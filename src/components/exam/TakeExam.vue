@@ -9,6 +9,40 @@
                         v-if="examInfo && examInfo.corner"
                     >{{examInfo.corner}}</i>-->
                 </h1>
+                   <div class="m-exam-op">
+                <Fav
+                    style="padding-top: 9px; padding-bottom: 9px"
+                    post-type="paper"
+                    :post-id="id"
+                />
+                <el-button
+                    v-if="isAuthor"
+                    type="primary"
+                    plain
+                    size="small"
+                    icon="el-icon-edit-outline"
+                    @click="edit"
+                    >编辑</el-button
+                >
+                <el-button
+                    v-if="isAdmin"
+                    type="warning"
+                    plain
+                    size="small"
+                    icon="el-icon-circle-close"
+                    @click="check('restore')"
+                    >复审</el-button
+                >
+                <el-button
+                    v-if="isAdmin"
+                    type="danger"
+                    plain
+                    size="small"
+                    icon="el-icon-delete"
+                    @click="check('delete')"
+                    >删除</el-button
+                >
+            </div>
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
                 <h3>{{ examInfo.desc }}</h3>
@@ -256,40 +290,7 @@
                 >
             </div>
 
-            <div class="m-exam-op">
-                <Fav
-                    style="padding-top: 9px; padding-bottom: 9px"
-                    post-type="paper"
-                    :post-id="id"
-                />
-                <el-button
-                    v-if="isAuthor"
-                    type="primary"
-                    plain
-                    size="small"
-                    icon="el-icon-edit-outline"
-                    @click="edit"
-                    >编辑</el-button
-                >
-                <el-button
-                    v-if="isAdmin"
-                    type="warning"
-                    plain
-                    size="small"
-                    icon="el-icon-circle-close"
-                    @click="check('restore')"
-                    >复审</el-button
-                >
-                <el-button
-                    v-if="isAdmin"
-                    type="danger"
-                    plain
-                    size="small"
-                    icon="el-icon-delete"
-                    @click="check('delete')"
-                    >删除</el-button
-                >
-            </div>
+         
         </div>
         <div class="m-exam-comment">
             <el-divider content-position="left">讨论</el-divider>
@@ -845,4 +846,19 @@ export default {
 
 <style lang="less">
 @import "../../assets/css/takeexam.less";
+</style>
+
+<style scoped lang="less">
+  .c-exam-take-title{
+      display: flex;
+      justify-content: space-between;
+      h1{
+          .fz(38px,1.4);.mb(20px);
+      }
+      .m-exam-op{
+          position:static;
+          flex-shrink: 0; 
+          .mt(20px);
+      }
+  }
 </style>
