@@ -48,7 +48,7 @@
                 <span class="q-attr-author">
                     提交人：
                     <el-link :href="paperAuthorLink" target="_blank" :underline="false">
-                        <el-avatar :src="paperAuthorAvatar"></el-avatar>
+                        <!-- <el-avatar :src="paperAuthorAvatar"></el-avatar> -->
                         {{ currentQuestion.createUser }}
                     </el-link>
                 </span>
