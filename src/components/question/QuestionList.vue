@@ -1,7 +1,12 @@
 <template>
     <div class="c-question">
         <h1 class="c-question-title">题目列表</h1>
-        <el-input placeholder="可选，输入题目名称" v-model="nameSearch" class="c-question-filter" @change="searchWithQuery">
+        <el-input
+            placeholder="可选，输入题目名称"
+            v-model="nameSearch"
+            class="c-question-filter"
+            @change="searchWithQuery"
+        >
             <el-select
                 v-model="tagSearch"
                 filterable
@@ -11,7 +16,7 @@
                 slot="prepend"
                 @change="searchWithQuery"
             >
-                <el-option label="全部" value=""></el-option>
+                <el-option label="全部" value></el-option>
                 <el-option-group
                     v-for="group in tagOptions"
                     :key="group.label"
@@ -40,9 +45,7 @@
             <el-table-column prop="id" label="编号" width="60"></el-table-column>
             <el-table-column prop="title" label="标题">
                 <template slot-scope="scope">
-                    <span
-                        class="c-question-list-title"
-                    >{{ filteredTitle(scope.row.title) }}</span>
+                    <span class="c-question-list-title">{{ filteredTitle(scope.row.title) }}</span>
                     <!-- <i class="u-mark bg-magenta" v-if="scope.row.corner">{{ scope.row.corner }}</i>
                     <i class="u-mark bg-black" v-if="scope.row.category">{{ scope.row.category }}</i>
                     <p class="c-question-list-desc">{{ scope.row.desc }}</p>-->
@@ -68,7 +71,7 @@
                     {{ scope.row.createUser }}
                     <!-- <span
                         class="c-question-list-authorid"
-                    >uid: {{scope.row.createUserId}}</span> -->
+                    >uid: {{scope.row.createUserId}}</span>-->
                 </template>
             </el-table-column>
             <!-- <el-table-column prop="medalAward" label="奖励" width="120"></el-table-column>
@@ -130,7 +133,7 @@ export default {
                     "藏剑",
                     "丐帮",
                     "蓬莱",
-                    "凌雪"
+                    "凌雪",
                 ],
                 subject: [
                     "语文",
@@ -142,11 +145,21 @@ export default {
                     "生物",
                     "政治",
                     "历史",
-                    "地理"
+                    "地理",
                 ],
                 game: ["PVE", "PVP", "PVX", "PVBB"],
-                play: ["副本", "宠物", "家园", "奇遇", "成就"],
-                domain: ["美容", "金融", "医学", "法学"]
+                play: [
+                    "副本",
+                    "宠物",
+                    "家园",
+                    "奇遇",
+                    "成就",
+                    "阵营",
+                    "野外",
+                    "竞技场",
+                    "切磋",
+                ],
+                domain: ["美容", "金融", "医学", "法学"],
             },
             marks: [{ label: "官方试卷", value: "official" }],
             tagSearch: "",
@@ -156,12 +169,12 @@ export default {
             page: 0,
             total: 1,
             pageSize: 15,
-            useQuery: false // 是否使用条件参数查询
+            useQuery: false, // 是否使用条件参数查询
         };
     },
     computed: {
         filteredTitle() {
-            return title => {
+            return (title) => {
                 let reg = /<[^<>]+>/g;
                 title = title.replace(reg, ""); //替换HTML标签
                 title = title.replace(/&nbsp;/gi, ""); //替换HTML空格
@@ -174,20 +187,20 @@ export default {
                 play: "玩法",
                 school: "门派",
                 subject: "学科",
-                domain: "领域"
+                domain: "领域",
             };
             let tmpOptions = [];
             // label options label value
             for (let key in translate) {
                 tmpOptions.push({
                     label: translate[key],
-                    options: this.tags[key].map(tag => {
+                    options: this.tags[key].map((tag) => {
                         return { label: tag, value: tag };
-                    })
+                    }),
                 });
             }
             return tmpOptions;
-        }
+        },
     },
     mounted() {
         this.getQuestionList();
@@ -214,7 +227,7 @@ export default {
             }
             this.loading = true;
             axios(url, "GET", false, [], null, query)
-                .then(response => {
+                .then((response) => {
                     // console.log(response);
                     let page = response.page;
                     if (page.total) {
@@ -223,7 +236,7 @@ export default {
                     }
                     this.listData = response.data;
                 })
-                .catch(e => {
+                .catch((e) => {
                     console.log(e);
                 })
                 .then(() => {
@@ -255,7 +268,7 @@ export default {
             let id = row.id;
             this.$router.push({
                 name: "question-take",
-                params: { id: id, questionInfo: row }
+                params: { id: id, questionInfo: row },
             });
         },
         changePage(i) {
@@ -264,8 +277,8 @@ export default {
         searchWithQuery() {
             this.useQuery = true;
             this.fetchData(1);
-        }
-    }
+        },
+    },
 };
 </script>
 

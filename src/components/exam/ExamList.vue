@@ -16,7 +16,7 @@
                 slot="prepend"
                 @change="searchWithQuery"
             >
-                <el-option label="全部" value=""></el-option>
+                <el-option label="全部" value></el-option>
                 <el-option-group
                     v-for="group in tagOptions"
                     :key="group.label"
@@ -31,17 +31,13 @@
                 </el-option-group>
             </el-select>
 
-            <el-button
-                slot="append"
-                icon="el-icon-search"
-                @click="searchWithQuery"
-            ></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="searchWithQuery"></el-button>
         </el-input>
 
         <div class="c-exam-list">
-            <el-row :gutter="20" >
-                <el-col :span="8" v-for="exam of listData" :key="exam.id"
-                    ><el-card
+            <el-row :gutter="20">
+                <el-col :span="8" v-for="exam of listData" :key="exam.id">
+                    <el-card
                         :body-style="{
                             padding: '0px',
                             position: 'relative',
@@ -61,43 +57,30 @@
                         <div
                             class="c-exam-list-corner"
                             v-if="exam.corner !== ''"
-                        >
-                            {{ corner(exam.corner) }}
-                        </div>
+                        >{{ corner(exam.corner) }}</div>
                         <div class="c-exam-list-main">
-                            <div class="c-exam-list-title">
-                                {{ exam.title }}
-                            </div>
+                            <div class="c-exam-list-title">{{ exam.title }}</div>
                             <el-tag
                                 v-for="tag of JSON.parse(exam.tags).slice(0, 3)"
                                 :key="tag"
                                 size="small"
-                                >{{ tag }}</el-tag
-                            >
+                            >{{ tag }}</el-tag>
                         </div>
                         <div class="c-exam-list-desc">
                             <div class="c-exam-list-desc-content">
-                                <img class="u-icon"
-                                    svg-inline
-                                    src="../../assets/img/logo.svg"
-                                />
+                                <img class="u-icon" svg-inline src="../../assets/img/logo.svg" />
                                 <div class="u-text">{{ exam.desc }}</div>
                             </div>
                             <div class="c-exam-list-desc-misc">
-                                <div class="desc-misc-left">
-                                    出卷人：{{ exam.createUser }}
-                                </div>
+                                <div class="desc-misc-left">出卷人：{{ exam.createUser }}</div>
                                 <div class="desc-misc-right">
                                     难度：
-                                    <el-rate
-                                        v-model="exam.hardStar"
-                                        disabled
-                                        text-color="#ff9900"
-                                    ></el-rate>
+                                    <el-rate v-model="exam.hardStar" disabled text-color="#ff9900"></el-rate>
                                 </div>
                             </div>
-                        </div> </el-card
-                ></el-col>
+                        </div>
+                    </el-card>
+                </el-col>
             </el-row>
         </div>
 
@@ -154,7 +137,17 @@ export default {
                     "地理",
                 ],
                 game: ["PVE", "PVP", "PVX", "PVBB"],
-                play: ["副本", "宠物", "家园", "奇遇", "成就"],
+                play: [
+                    "副本",
+                    "宠物",
+                    "家园",
+                    "奇遇",
+                    "成就",
+                    "阵营",
+                    "野外",
+                    "竞技场",
+                    "切磋",
+                ],
                 domain: ["美容", "金融", "医学", "法学"],
             },
             styleColor: {
