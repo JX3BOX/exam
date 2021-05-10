@@ -14,11 +14,11 @@
 
         <h5 class="u-title">参与贡献</h5>
         <div class="m-nav-group">
-            <a href="/dashboard/publish/#/exam/paper" class="u-item" target="_blank">
+            <a href="/publish/#/paper" class="u-item" target="_blank">
                 <i class="el-icon-s-opportunity"></i>
                 <span>制作试卷</span>
             </a>
-            <a href="/dashboard/publish/#/exam/question" class="u-item" target="_blank">
+            <a href="/publish/#/question" class="u-item" target="_blank">
                 <i class="el-icon-s-opportunity"></i>
                 <span>提交试题</span>
             </a>

@@ -9,51 +9,36 @@
                         v-if="examInfo && examInfo.corner"
                     >{{examInfo.corner}}</i>-->
                 </h1>
-                   <div class="m-exam-op">
-                <Fav
-                    style="padding-top: 9px; padding-bottom: 9px"
-                    post-type="paper"
-                    :post-id="id"
-                />
-                <el-button
-                    v-if="isAuthor"
-                    type="primary"
-                    plain
-                    size="small"
-                    icon="el-icon-edit-outline"
-                    @click="edit"
-                    >编辑</el-button
-                >
-                <el-button
-                    v-if="isAdmin"
-                    type="warning"
-                    plain
-                    size="small"
-                    icon="el-icon-circle-close"
-                    @click="check('restore')"
-                    >复审</el-button
-                >
-                <el-button
-                    v-if="isAdmin"
-                    type="danger"
-                    plain
-                    size="small"
-                    icon="el-icon-delete"
-                    @click="check('delete')"
-                    >删除</el-button
-                >
-            </div>
+                <div class="m-exam-op">
+                    <Fav
+                        style="padding-top: 9px; padding-bottom: 9px"
+                        post-type="paper"
+                        :post-id="id"
+                    />
+                    <el-button
+                        v-if="isAuthor"
+                        type="primary"
+                        plain
+                        size="small"
+                        icon="el-icon-edit-outline"
+                        @click="edit"
+                    >编辑</el-button>
+                    <el-button
+                        v-if="isAdmin"
+                        type="danger"
+                        plain
+                        size="small"
+                        icon="el-icon-delete"
+                        @click="check('delete')"
+                    >删除</el-button>
+                </div>
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
                 <h3>{{ examInfo.desc }}</h3>
                 <p class="c-exam-attr-content">
                     <span class="c-exam-attr-prop">出卷人：</span>
                     <span class="c-exam-attr-value">
-                        <el-link
-                            :href="paperAuthorLink"
-                            target="_blank"
-                            :underline="false"
-                        >
+                        <el-link :href="paperAuthorLink" target="_blank" :underline="false">
                             <!-- <el-avatar :src="paperAuthorAvatar"></el-avatar> -->
                             {{ examInfo.author }}
                         </el-link>
@@ -66,20 +51,17 @@
                             size="medium"
                             v-for="tag of JSON.parse(examInfo.tags)"
                             :key="tag"
-                            >{{ tag }}</el-tag
-                        >
+                        >{{ tag }}</el-tag>
                     </span>
                 </p>
                 <p class="c-exam-attr-content" style="margin-top: -8px">
                     <span class="c-exam-attr-prop">总共题数：</span>
                     <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
-                    <span class="c-exam-attr-value"
-                        >共10题，每题10分，满分100分。</span
-                    >
+                    <span class="c-exam-attr-value">共10题，每题10分，满分100分。</span>
                 </p>
-                <span class="u-views" v-if="views >= 0"
-                    ><i class="el-icon-view">&nbsp;{{ views }}</i></span
-                >
+                <span class="u-views" v-if="views >= 0">
+                    <i class="el-icon-view">&nbsp;{{ views }}</i>
+                </span>
                 <QRcode />
                 <span style="margin-left: 10px">
                     <Sharing
@@ -101,11 +83,7 @@
                 <p class="result-text">本次得分</p>
             </div>
             <template v-if="questionList.length > 0">
-                <div
-                    class="question-row"
-                    v-for="(question, index) of questionList"
-                    :key="index"
-                >
+                <div class="question-row" v-for="(question, index) of questionList" :key="index">
                     <el-card class="box-card">
                         <div class="card-header">
                             <div class="card-header-left">{{ index + 1 }}</div>
@@ -115,8 +93,7 @@
                                         size="small"
                                         v-for="tag of JSON.parse(question.tags)"
                                         :key="tag"
-                                        >{{ tag }}</el-tag
-                                    >
+                                    >{{ tag }}</el-tag>
                                 </span>
                             </div>
                         </div>
@@ -126,21 +103,19 @@
                                 v-if="eachCorrectiveness[question.id] !== undefined"
                                 :class="{'el-icon-success': eachCorrectiveness[question.id], 'el-icon-error': !eachCorrectiveness[question.id]}"
                                 ></i>-->
-                                <span class="q-hint"
-                                    >[{{
-                                        question.type === "checkbox"
-                                            ? "多选题"
-                                            : "单选题"
-                                    }}]</span
-                                >
+                                <span class="q-hint">
+                                    [{{
+                                    question.type === "checkbox"
+                                    ? "多选题"
+                                    : "单选题"
+                                    }}]
+                                </span>
                                 <!-- {{ question.title }} -->
                                 <Article :content="question.title"></Article>
                             </h3>
 
                             <template v-if="question.type === 'checkbox'">
-                                <el-checkbox-group
-                                    v-model="userAnswers[question.id]"
-                                >
+                                <el-checkbox-group v-model="userAnswers[question.id]">
                                     <el-checkbox
                                         v-for="(option, index) of JSON.parse(
                                             question.options
@@ -166,9 +141,7 @@
                                 </el-checkbox-group>
                             </template>
                             <template v-else>
-                                <el-radio-group
-                                    v-model="userAnswers[question.id]"
-                                >
+                                <el-radio-group v-model="userAnswers[question.id]">
                                     <el-radio
                                         v-for="(option, index) of JSON.parse(
                                             question.options
@@ -205,8 +178,7 @@
                                                 )
                                             "
                                             target="_blank"
-                                            >{{ question.createUser }}</el-link
-                                        >
+                                        >{{ question.createUser }}</el-link>
                                     </span>
                                 </p>
 
@@ -237,33 +209,23 @@
                             class="card-result-status"
                             style="color: #f12e2e"
                             v-if="userAnswers[question.id] === null"
-                        >
-                            未作答
-                        </p>
+                        >未作答</p>
                         <p
                             class="card-result-status"
                             style="color: #18ca4e"
                             v-else-if="eachCorrectiveness[question.id]"
-                        >
-                            回答正确
-                        </p>
+                        >回答正确</p>
+                        <p class="card-result-status" style="color: #f12e2e" v-else>回答错误</p>
                         <p
-                            class="card-result-status"
-                            style="color: #f12e2e"
-                            v-else
-                        >
-                            回答错误
-                        </p>
-                        <p class="card-result-options">
-                            你的答案：{{ userAnswerDisplayString(question.id) }}
-                        </p>
+                            class="card-result-options"
+                        >你的答案：{{ userAnswerDisplayString(question.id) }}</p>
                         <p class="card-result-options">
                             正确答案：{{
-                                correctAnswers[question.id]
-                                    .map((each) => {
-                                        return String.fromCharCode(65 + each);
-                                    })
-                                    .join("")
+                            correctAnswers[question.id]
+                            .map((each) => {
+                            return String.fromCharCode(65 + each);
+                            })
+                            .join("")
                             }}
                         </p>
                         <el-divider></el-divider>
@@ -273,9 +235,7 @@
                                 font-size: 20px;
                                 font-weight: 800;
                             "
-                        >
-                            解析：
-                        </p>
+                        >解析：</p>
                         <Article :content="whyami[question.id]"></Article>
                     </el-card>
                 </div>
@@ -286,11 +246,8 @@
                     type="success"
                     @click="preSubmitPaper"
                     v-if="!isSubmitted && !loading && questionList.length > 0"
-                    >提交试卷</el-button
-                >
+                >提交试卷</el-button>
             </div>
-
-         
         </div>
         <div class="m-exam-comment">
             <el-divider content-position="left">讨论</el-divider>
@@ -303,7 +260,7 @@
 import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/data/jx3box.json";
 import { JX3BOX } from "@jx3box/jx3box-common";
-import User from '@jx3box/jx3box-common/js/user'
+import User from "@jx3box/jx3box-common/js/user";
 import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { postStat } from "@/service/stat.js";
@@ -849,16 +806,17 @@ export default {
 </style>
 
 <style scoped lang="less">
-  .c-exam-take-title{
-      display: flex;
-      justify-content: space-between;
-      h1{
-          .fz(38px,1.4);.mb(20px);
-      }
-      .m-exam-op{
-          position:static;
-          flex-shrink: 0; 
-          .mt(20px);
-      }
-  }
+.c-exam-take-title {
+    display: flex;
+    justify-content: space-between;
+    h1 {
+        .fz(38px,1.4);
+        .mb(20px);
+    }
+    .m-exam-op {
+        position: static;
+        flex-shrink: 0;
+        .mt(20px);
+    }
+}
 </style>
