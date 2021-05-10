@@ -129,7 +129,7 @@ import { __next } from "@jx3box/jx3box-common/data/jx3box.json";
 import { JX3BOX } from "@jx3box/jx3box-common";
 import User from "@jx3box/jx3box-common/js/user";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
-import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
+import { showAvatar, authorLink,publishLink } from "@jx3box/jx3box-common/js/utils";
 import { postStat } from "@/service/stat.js";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 import { checkQuestion } from "@/service/admin.js";
@@ -151,7 +151,7 @@ export default {
             correctAnswer: null,
             isCorrect: undefined,
             authorAvatarUrl: "", // 这个url还没处理过
-            isAdmin: User.getInfo().group > 60,
+            isAdmin: User.isEditor(),
         };
     },
     computed: {
@@ -168,7 +168,7 @@ export default {
             return this.$route.params.id;
         },
         author_id : function (){
-              
+            return this.currentQuestion.createUserId
         },
         isAuthor: function () {
             return User.isLogin() && User.getInfo().uid == this.author_id;
@@ -370,7 +370,7 @@ export default {
 
         check: function (action) {
             if (action == "delete") {
-                this.$alert("确定删除吗", "消息", {
+                this.$alert("确定删除吗？", "消息", {
                     confirmButtonText: "确定",
                     callback: (pop) => {
                         if (pop == "confirm") {
@@ -393,6 +393,9 @@ export default {
                     location.reload();
                 });
             }
+        },
+        edit: function () {
+            location.href = publishLink('question') + '/' + this.id
         },
     },
 };

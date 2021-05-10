@@ -5,7 +5,7 @@
             name="趣味题库"
             slug="exam"
             root="/exam"
-            :publishEnable="true"
+            :publishEnable="false"
             :adminEnable="false"
             :feedbackEnable="true"
         >

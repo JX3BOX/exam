@@ -261,7 +261,7 @@ import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/data/jx3box.json";
 import { JX3BOX } from "@jx3box/jx3box-common";
 import User from "@jx3box/jx3box-common/js/user";
-import { showAvatar, authorLink } from "@jx3box/jx3box-common/js/utils";
+import { showAvatar, authorLink ,publishLink} from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import { postStat } from "@/service/stat.js";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
@@ -298,7 +298,7 @@ export default {
             whyami: {},
             sharingTitle: "试卷",
 
-            isAdmin: User.getInfo().group > 60,
+            isAdmin: User.isEditor(),
             author_id: "",
         };
     },
@@ -768,7 +768,7 @@ export default {
 
         check: function (action) {
             if (action == "delete") {
-                this.$alert("确定删除吗", "消息", {
+                this.$alert("确定删除吗？", "消息", {
                     confirmButtonText: "确定",
                     callback: (pop) => {
                         if (pop == "confirm") {
@@ -793,9 +793,7 @@ export default {
             }
         },
         edit: function () {
-            location.href =
-                "https://www.jx3box.com/dashboard/publish/#/exam/paper/" +
-                this.id;
+            location.href = publishLink('paper') + '/' + this.id
         },
     },
 };
