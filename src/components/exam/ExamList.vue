@@ -100,6 +100,7 @@
 <script>
 import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/data/jx3box.json";
+import tags from '@/assets/data/tags.json'
 export default {
     name: "ExamList",
     components: {
@@ -107,49 +108,7 @@ export default {
     },
     data() {
         return {
-            tags: {
-                school: [
-                    "七秀",
-                    "万花",
-                    "五毒",
-                    "长歌",
-                    "天策",
-                    "少林",
-                    "明教",
-                    "苍云",
-                    "纯阳",
-                    "唐门",
-                    "藏剑",
-                    "丐帮",
-                    "蓬莱",
-                    "凌雪",
-                ],
-                subject: [
-                    "语文",
-                    "数学",
-                    "外语",
-                    "信息",
-                    "物理",
-                    "化学",
-                    "生物",
-                    "政治",
-                    "历史",
-                    "地理",
-                ],
-                game: ["PVE", "PVP", "PVX", "PVBB"],
-                play: [
-                    "副本",
-                    "宠物",
-                    "家园",
-                    "奇遇",
-                    "成就",
-                    "阵营",
-                    "野外",
-                    "竞技场",
-                    "切磋",
-                ],
-                domain: ["美容", "金融", "医学", "法学"],
-            },
+            tags: tags,
             styleColor: {
                 default: "#2682ea",
                 green: "#66d362",
