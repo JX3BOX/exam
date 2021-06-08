@@ -263,10 +263,11 @@ import { JX3BOX } from "@jx3box/jx3box-common";
 import User from "@jx3box/jx3box-common/js/user";
 import { showAvatar, authorLink ,publishLink} from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
-import { postStat } from "@/service/stat.js";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 import { checkPaper } from "@/service/admin.js";
 import { $next } from "@/service/axios.js";
+import { getExam, submitAnswer } from "@/service/exam.js";
+import { getStat, postStat } from "@jx3box/jx3box-common/js/stat.js"
 export default {
     name: "TakeExam",
     components: {
@@ -359,15 +360,15 @@ export default {
                 }, 1000);
             }
         },
-        getAuthorAvatar(uid) {
-            axios(`https://server.jx3box.com/user/info?uid=${uid}`, "GET")
-                .then((response) => {
-                    this.authorAvatarUrl = response.data.avatar;
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        },
+        // getAuthorAvatar(uid) {
+        //     axios(`https://server.jx3box.com/user/info?uid=${uid}`, "GET")
+        //         .then((response) => {
+        //             this.authorAvatarUrl = response.data.avatar;
+        //         })
+        //         .catch((e) => {
+        //             console.log(e);
+        //         });
+        // },
         getExamInfo() {
             // if (this.id) {
 
@@ -388,8 +389,7 @@ export default {
             // 获取试卷信息
             this.loading = true;
 
-            $next
-                .get("api/question/user-exam-paper/" + this.examid + "?details")
+            getExam(this.examid)
                 .then((response) => {
                     response = response.data;
                     // if (!response.id) {
@@ -458,17 +458,15 @@ export default {
                 });
         },
         getStats() {
-            let getStatsUrl = realUrl(__next, "api/summary-any/paper-");
-            getStatsUrl += this.examid;
-            getStatsUrl += "/stat";
-            axios(getStatsUrl, "GET", true)
+            getStat("paper", this.examid)
                 .then((response) => {
-                    if ("views" in response) {
-                        this.views = response.views;
+                    if ("views" in response.data) {
+                        this.views = response.data.views;
                     }
                 })
                 .catch((e) => {
-                    switch (e.code) {
+                    e = e.response
+                    switch (e.status) {
                         case -1:
                             // 网络异常
                             this.$message.error(e.msg);
@@ -492,13 +490,11 @@ export default {
                 });
         },
         postStats() {
-            let postStatsUrl = realUrl(__next, "api/summary-any/paper-");
-            postStatsUrl += this.examid;
-            postStatsUrl += "?type=paper&actions=views";
-            axios(postStatsUrl, "GET", true)
+            postStat("paper", this.examid)
                 .then((response) => {})
                 .catch((e) => {
-                    switch (e.code) {
+                    e = e.response
+                    switch (e.status) {
                         case -1:
                             // 网络异常
                             this.$message.error(e.msg);
@@ -606,14 +602,7 @@ export default {
                 .then(() => {
                     this.isSubmitted = true;
                     this.loading = true;
-                    let postUrl = realUrl(
-                        __next,
-                        `api/question/user-exam-paper/${this.examid}/i-finish-all`
-                    );
-                    if (force) {
-                        postUrl += "?force";
-                    }
-                    axios(postUrl, "POST", true, answers)
+                    submitAnswer(this.examid, answers, force)
                         .then((response) => {
                             if (response.score) {
                                 this.correctCount =
@@ -621,6 +610,7 @@ export default {
                                 this.sharingTitle = `我在${this.examInfo.title}中取得了${response.score.score}分的好成绩，你也快来试试吧！`;
                                 this.score = response.score.score;
                                 window.scrollTo(0, 0);
+                                if (response.paper.questionDetailList[0].)
                                 this.getSolution();
                             } else {
                                 this.isSubmitted = false;
@@ -633,12 +623,13 @@ export default {
                         })
                         .catch((e) => {
                             this.isSubmitted = false;
-                            switch (e.code) {
+                            e = e.response
+                            switch (e.status) {
                                 case -1:
                                     // 网络异常
                                     this.$message.error(e.msg);
                                     break;
-                                case 9999:
+                                case 401:
                                     this.$message.error("登录失效, 请重新登录");
                                     //1.注销
                                     User.destroy();
@@ -652,7 +643,7 @@ export default {
                                     break;
                                 default:
                                     // 服务器错误
-                                    this.$message.error(`[${e.code}]${e.msg}`);
+                                    this.$message.error(`[${e.status}]${e.msg}`);
                             }
                         })
                         .then(() => {
