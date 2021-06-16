@@ -1,14 +1,61 @@
 <template>
     <div class="c-exam-take" v-loading="loading">
         <div class="c-exam-take-main">
-            <div class="c-exam-take-title">
-                <h1>
-                    《{{ examInfo ? examInfo.title : "试卷" }}》
-                    <!-- <i
+            <div class="m-exam-take-header" :class="{isDone:isSubmitted}">
+                <div class="c-exam-take-title">
+                    <h1>
+                        《{{ examInfo ? examInfo.title : "试卷" }}》
+                        <!-- <i
                         class="u-mark bg-magenta"
                         v-if="examInfo && examInfo.corner"
-                    >{{examInfo.corner}}</i>-->
-                </h1>
+                        >{{examInfo.corner}}</i>-->
+                    </h1>
+                </div>
+                <div class="c-exam-take-attr" v-if="examInfo">
+                    <h3>{{ examInfo.desc }}</h3>
+                    <p class="c-exam-attr-content">
+                        <span class="c-exam-attr-prop">出卷人：</span>
+                        <span class="c-exam-attr-value">
+                            <el-link :href="paperAuthorLink" target="_blank" :underline="false">
+                                <!-- <el-avatar :src="paperAuthorAvatar"></el-avatar> -->
+                                {{ examInfo.author }}
+                            </el-link>
+                        </span>
+                    </p>
+                    <p class="c-exam-attr-content" v-if="examInfo.tags">
+                        <span class="c-exam-attr-prop">试卷标签：</span>
+                        <span class="c-exam-attr-value">
+                            <el-tag
+                                size="medium"
+                                v-for="tag of JSON.parse(examInfo.tags)"
+                                :key="tag"
+                            >{{ tag }}</el-tag>
+                        </span>
+                    </p>
+                    <p class="c-exam-attr-content" style="margin-top: -8px">
+                        <span class="c-exam-attr-prop">总共题数：</span>
+                        <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
+                        <span class="c-exam-attr-value">共10题，每题10分，满分100分。</span>
+                    </p>
+                    <span class="u-views" v-if="views >= 0">
+                        <i class="el-icon-view">&nbsp;{{ views }}</i>
+                    </span>
+                    <QRcode />
+                    <span style="margin-left: 10px">
+                        <Sharing
+                            :title="sharingTitle"
+                            img="./assets/img/100.svg"
+                            v-if="score >= 0"
+                            key="beforeTest"
+                        />
+                        <Sharing
+                            :title="sharingTitle"
+                            img="./assets/img/100.svg"
+                            v-else
+                            key="afterTest"
+                        />
+                    </span>
+                </div>
                 <div class="m-exam-op">
                     <Fav
                         style="padding-top: 9px; padding-bottom: 9px"
@@ -22,8 +69,7 @@
                         size="small"
                         icon="el-icon-edit-outline"
                         @click="edit"
-                        >编辑</el-button
-                    >
+                    >编辑</el-button>
                     <el-button
                         v-if="isAdmin"
                         type="danger"
@@ -31,72 +77,16 @@
                         size="small"
                         icon="el-icon-delete"
                         @click="check('delete')"
-                        >删除</el-button
-                    >
+                    >删除</el-button>
                 </div>
             </div>
-            <div class="c-exam-take-attr" v-if="examInfo">
-                <h3>{{ examInfo.desc }}</h3>
-                <p class="c-exam-attr-content">
-                    <span class="c-exam-attr-prop">出卷人：</span>
-                    <span class="c-exam-attr-value">
-                        <el-link
-                            :href="paperAuthorLink"
-                            target="_blank"
-                            :underline="false"
-                        >
-                            <!-- <el-avatar :src="paperAuthorAvatar"></el-avatar> -->
-                            {{ examInfo.author }}
-                        </el-link>
-                    </span>
-                </p>
-                <p class="c-exam-attr-content" v-if="examInfo.tags">
-                    <span class="c-exam-attr-prop">试卷标签：</span>
-                    <span class="c-exam-attr-value">
-                        <el-tag
-                            size="medium"
-                            v-for="tag of JSON.parse(examInfo.tags)"
-                            :key="tag"
-                            >{{ tag }}</el-tag
-                        >
-                    </span>
-                </p>
-                <p class="c-exam-attr-content" style="margin-top: -8px">
-                    <span class="c-exam-attr-prop">总共题数：</span>
-                    <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
-                    <span class="c-exam-attr-value"
-                        >共10题，每题10分，满分100分。</span
-                    >
-                </p>
-                <span class="u-views" v-if="views >= 0">
-                    <i class="el-icon-view">&nbsp;{{ views }}</i>
-                </span>
-                <QRcode />
-                <span style="margin-left: 10px">
-                    <Sharing
-                        :title="sharingTitle"
-                        img="./assets/img/100.svg"
-                        v-if="score >= 0"
-                        key="beforeTest"
-                    />
-                    <Sharing
-                        :title="sharingTitle"
-                        img="./assets/img/100.svg"
-                        v-else
-                        key="afterTest"
-                    />
-                </span>
-            </div>
+
             <div class="c-exam-take-result" v-if="score !== -1">
                 <p class="result-score">{{ score }}</p>
                 <p class="result-text">本次得分</p>
             </div>
             <template v-if="questionList.length > 0">
-                <div
-                    class="question-row"
-                    v-for="(question, index) of questionList"
-                    :key="index"
-                >
+                <div class="question-row" v-for="(question, index) of questionList" :key="index">
                     <el-card class="box-card">
                         <div class="card-header">
                             <div class="card-header-left">{{ index + 1 }}</div>
@@ -106,8 +96,7 @@
                                         size="small"
                                         v-for="tag of JSON.parse(question.tags)"
                                         :key="tag"
-                                        >{{ tag }}</el-tag
-                                    >
+                                    >{{ tag }}</el-tag>
                                 </span>
                             </div>
                         </div>
@@ -119,9 +108,9 @@
                                 ></i>-->
                                 <span class="q-hint">
                                     [{{
-                                        question.type === "checkbox"
-                                            ? "多选题"
-                                            : "单选题"
+                                    question.type === "checkbox"
+                                    ? "多选题"
+                                    : "单选题"
                                     }}]
                                 </span>
                                 <!-- {{ question.title }} -->
@@ -129,9 +118,7 @@
                             </h3>
 
                             <template v-if="question.type === 'checkbox'">
-                                <el-checkbox-group
-                                    v-model="userAnswers[question.id]"
-                                >
+                                <el-checkbox-group v-model="userAnswers[question.id]">
                                     <el-checkbox
                                         v-for="(option, index) of JSON.parse(
                                             question.options
@@ -159,9 +146,7 @@
                                 </el-checkbox-group>
                             </template>
                             <template v-else>
-                                <el-radio-group
-                                    v-model="userAnswers[question.id]"
-                                >
+                                <el-radio-group v-model="userAnswers[question.id]">
                                     <el-radio
                                         v-for="(option, index) of JSON.parse(
                                             question.options
@@ -200,8 +185,7 @@
                                                 )
                                             "
                                             target="_blank"
-                                            >{{ question.createUser }}</el-link
-                                        >
+                                        >{{ question.createUser }}</el-link>
                                     </span>
                                 </p>
 
@@ -232,33 +216,23 @@
                             class="card-result-status"
                             style="color: #f12e2e"
                             v-if="userAnswers[question.id] === null"
-                        >
-                            未作答
-                        </p>
+                        >未作答</p>
                         <p
                             class="card-result-status"
                             style="color: #18ca4e"
                             v-else-if="eachCorrectiveness[question.id]"
-                        >
-                            回答正确
-                        </p>
+                        >回答正确</p>
+                        <p class="card-result-status" style="color: #f12e2e" v-else>回答错误</p>
                         <p
-                            class="card-result-status"
-                            style="color: #f12e2e"
-                            v-else
-                        >
-                            回答错误
-                        </p>
-                        <p class="card-result-options">
-                            你的答案：{{ userAnswerDisplayString(question.id) }}
-                        </p>
+                            class="card-result-options"
+                        >你的答案：{{ userAnswerDisplayString(question.id) }}</p>
                         <p class="card-result-options">
                             正确答案：{{
-                                correctAnswers[question.id]
-                                    .map((each) => {
-                                        return String.fromCharCode(65 + each);
-                                    })
-                                    .join("")
+                            correctAnswers[question.id]
+                            .map((each) => {
+                            return String.fromCharCode(65 + each);
+                            })
+                            .join("")
                             }}
                         </p>
                         <el-divider></el-divider>
@@ -268,9 +242,7 @@
                                 font-size: 20px;
                                 font-weight: 800;
                             "
-                        >
-                            解析：
-                        </p>
+                        >解析：</p>
                         <Article :content="whyami[question.id]"></Article>
                     </el-card>
                 </div>
@@ -281,8 +253,7 @@
                     type="success"
                     @click="preSubmitPaper"
                     v-if="!isSubmitted && !loading && questionList.length > 0"
-                    >提交试卷</el-button
-                >
+                >提交试卷</el-button>
             </div>
         </div>
         <div class="m-exam-comment">
@@ -644,7 +615,7 @@ export default {
                     this.loading = true;
                     submitAnswer(this.examid, answers, force)
                         .then((response) => {
-                            response = response.data
+                            response = response.data;
                             if (response.score) {
                                 this.correctCount =
                                     response.score.questionRightCount;
@@ -659,7 +630,7 @@ export default {
                                         response.paper.questionDetailList
                                     );
                                 } else {
-                                    this.getSolution()
+                                    this.getSolution();
                                 }
                             } else {
                                 this.isSubmitted = false;
@@ -729,9 +700,9 @@ export default {
             this.loading = true;
             getAnswer()
                 .then((response) => {
-                    response = response.data
+                    response = response.data;
                     if (response.paper && response.paper.questionDetailList) {
-                        this.parseSolution(response.paper.questionDetailList)
+                        this.parseSolution(response.paper.questionDetailList);
                     }
                 })
                 .catch((e) => {

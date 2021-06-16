@@ -36,7 +36,8 @@
 }
 @media screen and (max-width:@ipad){
     .c-exam-take-title h1{
-        .fz(1.2rem,1.5);
+        .fz(1.2rem,1.5) !important;
+        .mt(10px);
     }
 }
 .c-exam-take-attr {
@@ -527,8 +528,14 @@
 }
 
 
-.c-exam-take-main{
+.c-exam-take-main,.m-exam-take-header{
     .pr;
+}
+.m-exam-take-header.isDone{
+    .m-exam-op{
+        top:auto;
+        bottom:50px;
+    }
 }
 .m-exam-op{
     .pa;.rt(20px,50px);.z(1);
@@ -538,5 +545,13 @@
         .ps;
         .x;
         .mt(20px);
+
+        .none;
+    }
+}
+
+@media screen and (max-width:@phone){
+    .question-row .el-card .card-header .card-header-right .q-attr-value{
+        .mr(10px);
     }
 }
