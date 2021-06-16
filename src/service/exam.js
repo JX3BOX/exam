@@ -8,7 +8,12 @@ function submitAnswer(examid, answers, force=false) {
     return $next({proxy: true}).post(`api/question/user-exam-paper/${examid}/i-finish-all${force ? '?force' : ''}`, answers)
 }
 
+function getAnswer(examid) {
+    return $next({proxy: true}).post(`api/question/user-exam-paper/${examid}/i-need-answer`)
+}
+
 export {
     getExam,
-    submitAnswer
+    submitAnswer,
+    getAnswer
 };

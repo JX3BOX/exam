@@ -22,7 +22,8 @@
                         size="small"
                         icon="el-icon-edit-outline"
                         @click="edit"
-                    >编辑</el-button>
+                        >编辑</el-button
+                    >
                     <el-button
                         v-if="isAdmin"
                         type="danger"
@@ -30,7 +31,8 @@
                         size="small"
                         icon="el-icon-delete"
                         @click="check('delete')"
-                    >删除</el-button>
+                        >删除</el-button
+                    >
                 </div>
             </div>
             <div class="c-exam-take-attr" v-if="examInfo">
@@ -38,7 +40,11 @@
                 <p class="c-exam-attr-content">
                     <span class="c-exam-attr-prop">出卷人：</span>
                     <span class="c-exam-attr-value">
-                        <el-link :href="paperAuthorLink" target="_blank" :underline="false">
+                        <el-link
+                            :href="paperAuthorLink"
+                            target="_blank"
+                            :underline="false"
+                        >
                             <!-- <el-avatar :src="paperAuthorAvatar"></el-avatar> -->
                             {{ examInfo.author }}
                         </el-link>
@@ -51,13 +57,16 @@
                             size="medium"
                             v-for="tag of JSON.parse(examInfo.tags)"
                             :key="tag"
-                        >{{ tag }}</el-tag>
+                            >{{ tag }}</el-tag
+                        >
                     </span>
                 </p>
                 <p class="c-exam-attr-content" style="margin-top: -8px">
                     <span class="c-exam-attr-prop">总共题数：</span>
                     <!-- <span class="c-exam-attr-value">{{questionIdList.length}}</span> -->
-                    <span class="c-exam-attr-value">共10题，每题10分，满分100分。</span>
+                    <span class="c-exam-attr-value"
+                        >共10题，每题10分，满分100分。</span
+                    >
                 </p>
                 <span class="u-views" v-if="views >= 0">
                     <i class="el-icon-view">&nbsp;{{ views }}</i>
@@ -83,7 +92,11 @@
                 <p class="result-text">本次得分</p>
             </div>
             <template v-if="questionList.length > 0">
-                <div class="question-row" v-for="(question, index) of questionList" :key="index">
+                <div
+                    class="question-row"
+                    v-for="(question, index) of questionList"
+                    :key="index"
+                >
                     <el-card class="box-card">
                         <div class="card-header">
                             <div class="card-header-left">{{ index + 1 }}</div>
@@ -93,7 +106,8 @@
                                         size="small"
                                         v-for="tag of JSON.parse(question.tags)"
                                         :key="tag"
-                                    >{{ tag }}</el-tag>
+                                        >{{ tag }}</el-tag
+                                    >
                                 </span>
                             </div>
                         </div>
@@ -105,9 +119,9 @@
                                 ></i>-->
                                 <span class="q-hint">
                                     [{{
-                                    question.type === "checkbox"
-                                    ? "多选题"
-                                    : "单选题"
+                                        question.type === "checkbox"
+                                            ? "多选题"
+                                            : "单选题"
                                     }}]
                                 </span>
                                 <!-- {{ question.title }} -->
@@ -115,7 +129,9 @@
                             </h3>
 
                             <template v-if="question.type === 'checkbox'">
-                                <el-checkbox-group v-model="userAnswers[question.id]">
+                                <el-checkbox-group
+                                    v-model="userAnswers[question.id]"
+                                >
                                     <el-checkbox
                                         v-for="(option, index) of JSON.parse(
                                             question.options
@@ -125,14 +141,16 @@
                                         border
                                         :disabled="isSubmitted"
                                         :class="{
-                                            'is-correct-answer': isCorrectAnswerClass(
-                                                question.id,
-                                                index
-                                            ),
-                                            'is-wrong-answer': isWrongAnswerClass(
-                                                question.id,
-                                                index
-                                            ),
+                                            'is-correct-answer':
+                                                isCorrectAnswerClass(
+                                                    question.id,
+                                                    index
+                                                ),
+                                            'is-wrong-answer':
+                                                isWrongAnswerClass(
+                                                    question.id,
+                                                    index
+                                                ),
                                         }"
                                     >
                                         {{ String.fromCharCode(65 + index) }}.
@@ -141,7 +159,9 @@
                                 </el-checkbox-group>
                             </template>
                             <template v-else>
-                                <el-radio-group v-model="userAnswers[question.id]">
+                                <el-radio-group
+                                    v-model="userAnswers[question.id]"
+                                >
                                     <el-radio
                                         v-for="(option, index) of JSON.parse(
                                             question.options
@@ -151,14 +171,16 @@
                                         border
                                         :disabled="isSubmitted"
                                         :class="{
-                                            'is-correct-answer': isCorrectAnswerClass(
-                                                question.id,
-                                                index
-                                            ),
-                                            'is-wrong-answer': isWrongAnswerClass(
-                                                question.id,
-                                                index
-                                            ),
+                                            'is-correct-answer':
+                                                isCorrectAnswerClass(
+                                                    question.id,
+                                                    index
+                                                ),
+                                            'is-wrong-answer':
+                                                isWrongAnswerClass(
+                                                    question.id,
+                                                    index
+                                                ),
                                         }"
                                     >
                                         {{ String.fromCharCode(65 + index) }}.
@@ -178,7 +200,8 @@
                                                 )
                                             "
                                             target="_blank"
-                                        >{{ question.createUser }}</el-link>
+                                            >{{ question.createUser }}</el-link
+                                        >
                                     </span>
                                 </p>
 
@@ -209,23 +232,33 @@
                             class="card-result-status"
                             style="color: #f12e2e"
                             v-if="userAnswers[question.id] === null"
-                        >未作答</p>
+                        >
+                            未作答
+                        </p>
                         <p
                             class="card-result-status"
                             style="color: #18ca4e"
                             v-else-if="eachCorrectiveness[question.id]"
-                        >回答正确</p>
-                        <p class="card-result-status" style="color: #f12e2e" v-else>回答错误</p>
+                        >
+                            回答正确
+                        </p>
                         <p
-                            class="card-result-options"
-                        >你的答案：{{ userAnswerDisplayString(question.id) }}</p>
+                            class="card-result-status"
+                            style="color: #f12e2e"
+                            v-else
+                        >
+                            回答错误
+                        </p>
+                        <p class="card-result-options">
+                            你的答案：{{ userAnswerDisplayString(question.id) }}
+                        </p>
                         <p class="card-result-options">
                             正确答案：{{
-                            correctAnswers[question.id]
-                            .map((each) => {
-                            return String.fromCharCode(65 + each);
-                            })
-                            .join("")
+                                correctAnswers[question.id]
+                                    .map((each) => {
+                                        return String.fromCharCode(65 + each);
+                                    })
+                                    .join("")
                             }}
                         </p>
                         <el-divider></el-divider>
@@ -235,7 +268,9 @@
                                 font-size: 20px;
                                 font-weight: 800;
                             "
-                        >解析：</p>
+                        >
+                            解析：
+                        </p>
                         <Article :content="whyami[question.id]"></Article>
                     </el-card>
                 </div>
@@ -246,7 +281,8 @@
                     type="success"
                     @click="preSubmitPaper"
                     v-if="!isSubmitted && !loading && questionList.length > 0"
-                >提交试卷</el-button>
+                    >提交试卷</el-button
+                >
             </div>
         </div>
         <div class="m-exam-comment">
@@ -261,13 +297,17 @@ import { axios, realUrl } from "@/service/api.js";
 import { __next } from "@jx3box/jx3box-common/data/jx3box.json";
 import { JX3BOX } from "@jx3box/jx3box-common";
 import User from "@jx3box/jx3box-common/js/user";
-import { showAvatar, authorLink ,publishLink} from "@jx3box/jx3box-common/js/utils";
+import {
+    showAvatar,
+    authorLink,
+    publishLink,
+} from "@jx3box/jx3box-common/js/utils";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 import { checkPaper } from "@/service/admin.js";
 import { $next } from "@/service/axios.js";
-import { getExam, submitAnswer } from "@/service/exam.js";
-import { getStat, postStat } from "@jx3box/jx3box-common/js/stat.js"
+import { getExam, submitAnswer, getAnswer } from "@/service/exam.js";
+import { getStat, postStat } from "@jx3box/jx3box-common/js/stat.js";
 export default {
     name: "TakeExam",
     components: {
@@ -465,7 +505,7 @@ export default {
                     }
                 })
                 .catch((e) => {
-                    e = e.response
+                    e = e.response;
                     switch (e.status) {
                         case -1:
                             // 网络异常
@@ -493,7 +533,7 @@ export default {
             postStat("paper", this.examid)
                 .then((response) => {})
                 .catch((e) => {
-                    e = e.response
+                    e = e.response;
                     switch (e.status) {
                         case -1:
                             // 网络异常
@@ -604,14 +644,23 @@ export default {
                     this.loading = true;
                     submitAnswer(this.examid, answers, force)
                         .then((response) => {
+                            response = response.data
                             if (response.score) {
                                 this.correctCount =
                                     response.score.questionRightCount;
                                 this.sharingTitle = `我在${this.examInfo.title}中取得了${response.score.score}分的好成绩，你也快来试试吧！`;
                                 this.score = response.score.score;
                                 window.scrollTo(0, 0);
-                                if (response.paper.questionDetailList[0].)
-                                this.getSolution();
+                                if (
+                                    response.paper.questionDetailList[0]
+                                        .answerList
+                                ) {
+                                    this.parseSolution(
+                                        response.paper.questionDetailList
+                                    );
+                                } else {
+                                    this.getSolution()
+                                }
                             } else {
                                 this.isSubmitted = false;
                                 if (response.msg) {
@@ -623,7 +672,7 @@ export default {
                         })
                         .catch((e) => {
                             this.isSubmitted = false;
-                            e = e.response
+                            e = e.response;
                             switch (e.status) {
                                 case -1:
                                     // 网络异常
@@ -643,7 +692,9 @@ export default {
                                     break;
                                 default:
                                     // 服务器错误
-                                    this.$message.error(`[${e.status}]${e.msg}`);
+                                    this.$message.error(
+                                        `[${e.status}]${e.msg}`
+                                    );
                             }
                         })
                         .then(() => {
@@ -655,33 +706,32 @@ export default {
                 });
         },
 
+        // 展示答案，是否正确，已经给选项标上是否正确的标记
+        parseSolution(qda) {
+            let tmpAnswerList = {};
+            let tmpCorrectiveness = {};
+            let tmpWhyami = {};
+            qda.forEach((question) => {
+                tmpAnswerList[question.id] = question.answerList;
+                tmpCorrectiveness[question.id] =
+                    question.myAnswer !== undefined &&
+                    question.answerList.sort().toString() ===
+                        question.myAnswer.sort().toString();
+                tmpWhyami[question.id] = question.whyami;
+            });
+            this.correctAnswers = tmpAnswerList;
+            this.eachCorrectiveness = tmpCorrectiveness;
+            this.whyami = tmpWhyami;
+        },
+
         // 获取试卷答案
         getSolution() {
             this.loading = true;
-            let solutionUrl = realUrl(
-                __next,
-                `api/question/user-exam-paper/${this.examid}/i-need-answer`
-            );
-            axios(solutionUrl, "GET", true)
+            getAnswer()
                 .then((response) => {
-                    // console.log(response);
+                    response = response.data
                     if (response.paper && response.paper.questionDetailList) {
-                        // 展示答案，是否正确，已经给选项标上是否正确的标记
-                        let qda = response.paper.questionDetailList;
-                        let tmpAnswerList = {};
-                        let tmpCorrectiveness = {};
-                        let tmpWhyami = {};
-                        qda.forEach((question) => {
-                            tmpAnswerList[question.id] = question.answerList;
-                            tmpCorrectiveness[question.id] =
-                                question.myAnswer !== undefined &&
-                                question.answerList.sort().toString() ===
-                                    question.myAnswer.sort().toString();
-                            tmpWhyami[question.id] = question.whyami;
-                        });
-                        this.correctAnswers = tmpAnswerList;
-                        this.eachCorrectiveness = tmpCorrectiveness;
-                        this.whyami = tmpWhyami;
+                        this.parseSolution(response.paper.questionDetailList)
                     }
                 })
                 .catch((e) => {
@@ -784,7 +834,7 @@ export default {
             }
         },
         edit: function () {
-            location.href = publishLink('paper') + '/' + this.id
+            location.href = publishLink("paper") + "/" + this.id;
         },
     },
 };
