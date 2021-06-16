@@ -30,6 +30,9 @@ module.exports = {
                     request.setHeader("origin", "");
                 }
             },
+            "/api/cms":{
+                "target": "https://cms.jx3box.com",
+            },
             "/api": {
                 "target": "https://next.jx3box.com",
                 "onProxyReq": function (request) {
